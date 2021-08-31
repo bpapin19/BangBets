@@ -16,18 +16,24 @@ export default function Signup() {
         e.preventDefault();
 
         if(passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError("Passwords do not match")
+            return setError("Passwords do not match");
         }
 
         try {
-            setError("")
-            setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
-            history.push('/')
+            setError("");
+            setLoading(true);
+            await signup(emailRef.current.value, passwordRef.current.value);
+            history.push('/');
         } catch {
-            setError("Failed to create account")
+            setError("Failed to create account");
         }
-        setLoading(false)
+        setLoading(false);
+    }
+
+    const borderStyles = {
+        borderRadius: "10px",
+        boxShadow: "0 2px 20px rgba(0, 0, 0, 0.2)",
+        width: "100%",
     }
     
     return (
@@ -37,11 +43,11 @@ export default function Signup() {
                 style={{ minHeight: "100vh"}}
             >
             <div className="w-100" style={{ maxWidth: "400px" }}>
-                <Card>
+                <div style={borderStyles}>
                     <Card.Body>
                         <h2 className="text-center mb-4">Sign Up</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
-                        <Form onSubmit={handleSubmit}>
+                        <Form style={{width: "360px"}} onSubmit={handleSubmit}>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" ref={emailRef} required />
@@ -57,7 +63,7 @@ export default function Signup() {
                             <Button disabled={loading} className="w-100" type="submit">Sign Up</Button>
                         </Form>
                     </Card.Body>
-                </Card>
+                </div>
                 <div className="w-100 text-center mt-2">
                     Already have an account? <Link to='/login'>Login</Link>
                 </div>

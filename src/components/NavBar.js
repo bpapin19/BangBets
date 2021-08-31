@@ -1,18 +1,19 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import './NavBar.css';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function NavBar() {
   const {currentUser} = useAuth();
+  const [currentUserName, setCurrentUserName] = useState();
 
-  function getUsername(email) {
-    return email.slice(0, email.indexOf("@"));
-  }
+  useEffect(() => {
+    setCurrentUserName(currentUser.displayName);
+  }, [])
 
   return (
     <header className="navbar">
-      <div className="container mx-auto flex">
+      <div className="container mx-auto flex navbar-content">
         <div className="container mx-auto flex justify-between">
             <div className="inline-flex py-3 px-3 my-6">
                 <NavLink
@@ -24,7 +25,7 @@ export default function NavBar() {
                     SpotTracker
                 </NavLink>
             </div>
-            <nav className="flex">
+            <nav className="middle">
                 <NavLink
                     to="/add-spot"
                     activeClassName="text-blue-100 bg-blue-700"
@@ -43,11 +44,11 @@ export default function NavBar() {
         <div className="inline-flex py-3 px-3 my-6">
         {!currentUser &&
           <NavLink
-            to="/signup"
+            to="/login"
             activeClassName="text-blue-100 bg-blue-700"
             className="navlink-title"
           >
-            Sign In / Sign Up
+            Sign In
           </NavLink>
         }
         {currentUser &&
@@ -56,7 +57,7 @@ export default function NavBar() {
             activeClassName="text-blue-100 bg-blue-700"
             className="navlink-title"
           >
-            {getUsername(currentUser.email)}
+            {currentUserName}
           </NavLink>
         }
         </div>

@@ -1,131 +1,178 @@
-import React, {useRef, useState} from "react";
-import {Form, Button, Card, Container, Alert} from 'react-bootstrap'
+import React, {useRef, useState, useEffect} from "react";
+import {Form, Button, Card, Container} from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useHistory } from 'react-router-dom';
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import MapContainer from "./Map";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import axios from 'axios';
 
 export default function AddSpot() {
-    const nameRef = useRef();
-    const locationRef = useRef();
-    const descriptionRef = useRef();
-    const spotRef = useRef();
-    const parkRef = useRef();
-    const photoRef = useRef();
-    const [error, setError] = useState();
-    const [loading, setLoading] = useState(false);
-    const history = useHistory();
-    const { currentUser } = useAuth();
-    const provider = new OpenStreetMapProvider();
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+  // Use Ref
+  const nameRef = useRef();
+  const locationRef = useRef();
+  const descriptionRef = useRef();
+  const photoRef = useRef();
+  const { currentUser } = useAuth();
 
-        try {
-          setError('')
-          // Add to database
-        } catch {
-          setError('Unable to add your spot')
+  // Use State
+  const [address, setAddress] = useState("");
+  const [coordinates, setCoordinates] = useState("");
+  const [type, setType] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+  const [file, setFile] = useState( null );
+
+  useEffect(() => {
+    if (file !== null){
+      if (file.size > 1000000) {
+        setError("File too large, uploads limited to 1MB");
+        setSuccess("");
+      } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png')) {
+        setError("Only jpeg and png formats are supported");
+      } else {
+        setError("");
+      }
+    }
+  }, [file]);
+
+  async function handleSubmit(e) {
+      e.preventDefault();
+
+      const formData = new FormData();
+
+      const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
         }
+    };
 
-        const results = await provider.search({ query: locationRef.current.value });
-        console.log(results[0]);
+        if (error === "") {
+          try {
 
-        console.log(currentUser.email);
-        console.log(nameRef.current.value);
-        console.log(locationRef.current.value);
-        //add location to db with address and coordinates
-        console.log(descriptionRef.current.value);
-        // console.log(parkRef.current.value);
-        console.log(photoRef.current.value);
-        
+            formData.append('myfile', file);
+            axios.post("http://localhost:3001/api/files", formData, config);
+
+            axios({
+              method: 'post',
+              url: "http://localhost:3001/api/spot",
+              data: {
+                user: currentUser.displayName,
+                name: nameRef.current.value,
+                location: address,
+                lat: coordinates.lat,
+                lng: coordinates.lng,
+                desc: descriptionRef.current.value,
+                type: type,
+                photo: file.name,
+              }
+            })
+            .then(res => {
+                setSuccess(res.data.message);
+            })
+            e.target.reset();
+            setAddress("");
+          } catch {
+            setError('Unable to add your spot')
+          }
+        }
     }
 
-    const [address, setAddress] = useState("");
-    const [coordinates, setCoordinates] = useState("");
+  const handleSelect = async (value) => {
+    const results = await geocodeByAddress(value);
+    const latlng = await getLatLng(results[0]);
+    setAddress(value);
+    setCoordinates(latlng);
+  } 
 
-    const handleSelect = async (value) => {
-      const results = await geocodeByAddress(value);
-      const latlng = await getLatLng(results[0]);
-      setAddress(value);
-      setCoordinates(latlng);
-    }
+  const handleFileUpload = (e) => {
+    setFile(e.target.files[0]);
+    console.log(e.target.files[0])
+  }
 
-    return (
-      <>
-      <Container
-              className="d-flex justify-content-center"
-              style={{ minHeight: "100vh"}}
-          >
-          <div className="w-100" style={{ maxWidth: "400px" }}>
-              <Card>
-                  <Card.Body>
-                      <h2 className="text-center mb-4">Add a Spot</h2>
-                      {error && <Alert variant="danger">{error}</Alert>}
-                      <Form onSubmit={handleSubmit}>
-                          <Form.Group id="name">
-                              <Form.Label>Name</Form.Label>
-                              <Form.Control placeholder="Think of a name" ref={nameRef} required />
-                          </Form.Group>
-                          
-                          <Form.Group id="location">
-                              <Form.Label>Location</Form.Label>
-                              <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
-                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) =>
+  const handleChange = e => {
+    setType(e.target.value);
+  }
+
+  const borderStyles = {
+    borderRadius: "10px",
+    boxShadow: "0 2px 20px rgba(0, 0, 0, 0.2)"
+  }
+
+  return (
+    <>
+    <Container
+            className="d-flex justify-content-center"
+            style={{ minHeight: "100vh"}}
+        >
+        <div className="w-100" style={{ maxWidth: "400px" }}>
+          { success && 
+          <div className="alert alert-success">{success}</div> }
+          { error && 
+          <div className="alert alert-danger">{error}</div> }
+            <div style={ borderStyles }>
+                <Card.Body>
+                    <h2 className="text-center mb-4">Add a Spot</h2>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group id="name">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control placeholder="Think of a name" ref={nameRef} required />
+                        </Form.Group>
+                        <Form.Group id="location">
+                            <Form.Label>Address</Form.Label>
+                            <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
+                              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) =>
+                                <div>
+                                  <Form.Control ref={locationRef} {...getInputProps({placeholder: "Address of spot"})} />
                                   <div>
-                                    <Form.Control ref={locationRef} {...getInputProps({placeholder: "Address of spot"})} />
-                                    <div>
-                                      {loading ? <div>...loading</div> : null}
+                                    {suggestions.map(suggestion => {
+                                      const style = suggestion.active
+                                      ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white" }
+                                      : { backgroundColor: '#ffffff', cursor: 'pointer' };
 
-                                      {suggestions.map(suggestion => {
-                                        const style = suggestion.active
-                                        ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white" }
-                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
-
-                                        return (
-                                        <div {...getSuggestionItemProps(suggestion, { style })}>
-                                          {suggestion.description}
-                                        </div>
-                                        );
-                                      })}
-                                    </div>
+                                      return (
+                                      <div {...getSuggestionItemProps(suggestion, { style })}>
+                                        {suggestion.description}
+                                      </div>
+                                      );
+                                    })}
                                   </div>
-                                }
-                              </PlacesAutocomplete>
-                          </Form.Group>
-                          <Form.Group id="description">
-                              <Form.Label>Description</Form.Label>
-                              <Form.Control placeholder="Describe the ground, security, lighting, etc." ref={descriptionRef}/>
-                          </Form.Group>
-                          <Form.Group id="type">
-                            <Form.Label>Type</Form.Label>
-                              <Form.Check 
-                                type={'radio'}
-                                id={'Spot'}
-                                value={'Spot'}
-                                label={'Spot'}
-                                name={'type'}
-                                required
-                              />
-                              <Form.Check 
-                                type={'radio'}
-                                id={'Park'}
-                                value={'Park'}
-                                label={'Park'}
-                                name={'type'}
-                                required
-                              />
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.File id="photo" label="Photo" ref={photoRef}/>
-                          </Form.Group>
-                          <Button disabled={loading} className="w-100" type="submit">Add Spot</Button>
-                      </Form>
-                  </Card.Body>
-              </Card>
-          </div>
-      </Container>
-      </>
-    )
+                                </div>
+                              }
+                            </PlacesAutocomplete>
+                        </Form.Group>
+                        <Form.Group id="description">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control placeholder="Describe the ground, lighting, etc." ref={descriptionRef}/>
+                        </Form.Group>
+                        <Form.Group id="type">
+                          <Form.Label>Type</Form.Label>
+                            <Form.Check 
+                              type={'radio'}
+                              id={'Spot'}
+                              value={'Spot'}
+                              label={'Spot'}
+                              name={'type'}
+                              onChange={handleChange}
+                              required
+                            />
+                            <Form.Check 
+                              type={'radio'}
+                              id={'Park'}
+                              value={'Park'}
+                              label={'Park'}
+                              name={'type'}
+                              onChange={handleChange}
+                              required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.File id="photo" label="Photo" onChange={handleFileUpload} ref={photoRef}/>
+                        </Form.Group>
+                        <Button className="w-100" type="submit">Add Spot</Button>
+                    </Form>
+                </Card.Body>
+            </div>
+        </div>
+    </Container>
+    </>
+  )
 }

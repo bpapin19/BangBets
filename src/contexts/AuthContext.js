@@ -8,37 +8,48 @@ export function useAuth() {
 }
 
 export function AuthProvider({children}) {
-    const [currentUser, setCurrentUser] = useState()
-    const [loading, setLoading] = useState(true)
+    const [currentUser, setCurrentUser] = useState();
+    const [loading, setLoading] = useState(true);
 
     function signup(email, password) {
-        return auth.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password).then(function(result) {
+            result.user.updateProfile({
+                displayName: email.slice(0, email.indexOf("@"))
+            });
+            return result.user;
+        });
     }
 
     function login(email, password) {
-        return auth.signInWithEmailAndPassword(email, password)
+        return auth.signInWithEmailAndPassword(email, password);
     }
 
     function logout() {
-        return auth.signOut()
+        return auth.signOut();
+    }
+
+    function updateUsername(username) {
+        return currentUser.updateProfile({
+            displayName: username
+        });
     }
 
     function resetPassword(email) {
-        return auth.sendPasswordResetEmail(email)
+        return auth.sendPasswordResetEmail(email);
     }
 
     function updateEmail(email) {
-        return currentUser.updateEmail(email)
+        return currentUser.updateEmail(email);
     }
 
     function updatePassword(password) {
-        return currentUser.updatePassword(password)
+        return currentUser.updatePassword(password);
     }
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-            setCurrentUser(user)
-            setLoading(false)
+            setCurrentUser(user);
+            setLoading(false);
         });
         return unsubscribe
     }, [])
@@ -50,7 +61,8 @@ export function AuthProvider({children}) {
         logout,
         resetPassword,
         updateEmail,
-        updatePassword
+        updatePassword,
+        updateUsername
     }
     return (
         <AuthContext.Provider value={value}>

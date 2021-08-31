@@ -9,54 +9,27 @@
     text-decoration: none;
     padding: 0 5px;
 }
+
 .site-title {
     color: black;
     text-decoration: none;
     padding: 0 5px;
     font-size: 25px;
 }
+
+.site-title:hover, .navlink-title:hover{
+    text-decoration: none;
+}
   
 .pin {
-    position: fixed; /* Set the navbar to fixed position */
-    top: 0; /* Position the navbar at the top of the page */
-    width: 100%; /* Full width */
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 
-/* Tooltip container */
 .tooltip {
     position: relative;
-    display: inline-block; /* If you want dots under the hoverable text */
-}
-
-.logo {
-    height: 60px;
-    width: 70px;
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 100px;
-    background-color: rgb(104, 104, 104);
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    opacity: 0;
-    transition: opacity .25s;
-
-    /* Position the tooltip text - see examples below! */
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    margin-left: -60px;
-    }
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-    opacity: 1;
-    visibility: visible;
+    display: inline-block;
 }
 
 .title:hover .title2 { color: white; }
@@ -65,3 +38,18 @@
     float: right;
     padding-left: 5px;
 }
+
+.middle {
+    align-items: center;
+    margin-right: 20px;
+}
+
+@media (max-width:800px){
+    .navlink-title {
+        font-size: 13px;
+    }
+
+    .site-title {
+        font-size: 16px;
+    }
+  }

@@ -1,0 +1,32 @@
+.clear-button {
+    background-color: white;
+    border: none;
+    z-index: 2;
+    margin-left: -27px;
+}
+
+.search-input {
+    width: 250px;
+    border-radius: 5px;
+}
+
+.use-curr-button {
+    background-color: transparent;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.use-curr-button:hover {
+    background-color: rgb(40, 115, 206);
+    color: white;
+}
+
+.icon {
+    transform: translateY(-4%);
+}
+
+@media (max-width:600px){
+    .button-text {
+      display: none;
+    }
+  }
