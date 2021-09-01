@@ -36,6 +36,7 @@ export default function Profile() {
                         <Form style={{width: "360px"}}>
                             <h2 className="text-center mb-4">Profile</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
+                            <img className="pfp-big" src={`/pfps/${currentUser.email + ".jpg"}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
                             <div style={elementStyles}>
                                 <strong>Username: </strong> 
                                 <span>{currentUser.displayName}</span>

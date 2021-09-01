@@ -1,44 +1,75 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {Form, Button, Card, Container, Alert} from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useHistory } from 'react-router-dom'
+import axios from 'axios';
 
 export default function UpdateProfile() {
     const usernameRef = useRef();
     const emailRef = useRef();
-    const passwordRef = useRef();
-    const passwordConfirmRef = useRef();
-    const { currentUser, updateEmail, updatePassword, updateUsername } = useAuth();
-    const [error, setError] = useState();
+    const { currentUser, updateEmail, updateUsername } = useAuth();
+    const [error, setError] = useState("");
+    const [file, setFile] = useState( null );
     const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const photoRef = useRef();
+
+    useEffect(() => {
+        if (file !== null){
+          if (file.size > 1000000) {
+            setError("File too large, uploads limited to 1MB");
+          } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png')) {
+            setError("Only jpeg and png formats are supported");
+          } else {
+            setError("");
+          }
+        }
+      }, [file]);
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        const promises = [];
-        setLoading(true);
-        setError("");
+        // Handle profile photo file upload
+        const formData = new FormData();
 
-        if (emailRef.current.value !== currentUser.email) {
-            promises.push(updateEmail(emailRef.current.value));
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+                'from': 'update-profile',
+                'current-user-email': currentUser.email,
+            }
+          };
+
+        if (error === "") {
+            if (file != null) {
+                formData.append('myfile', file);
+                axios.post("http://localhost:3001/api/files", formData, config, currentUser.email);
+            }
+
+            const promises = [];
+            setLoading(true);
+            setError("");
+
+            if (emailRef.current.value !== currentUser.email) {
+                promises.push(updateEmail(emailRef.current.value));
+            }
+
+            if (usernameRef.current.value) {
+                promises.push(updateUsername(usernameRef.current.value));
+            }
+
+            Promise.all(promises).then(() => {
+                history.push('/profile');
+            }).catch(() => {
+                setError("Failed to update account");
+            }).finally(() => {
+                setLoading(false);
+            })
         }
+    }
 
-        if (passwordRef.current.value) {
-            promises.push(updatePassword(passwordRef.current.value));
-        }
-
-        if (usernameRef.current.value) {
-            promises.push(updateUsername(usernameRef.current.value));
-        }
-
-        Promise.all(promises).then(() => {
-            history.push('/profile');
-        }).catch(() => {
-            setError("Failed to update account");
-        }).finally(() => {
-            setLoading(false);
-        })
+    const handleFileUpload = (e) => {
+        setFile(e.target.files[0]);
     }
 
     const borderStyles = {
@@ -66,13 +97,8 @@ export default function UpdateProfile() {
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" ref={emailRef} defaultValue={currentUser.email}/>
                             </Form.Group>
-                            <Form.Group id="password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control autocomplete="off" type="password" ref={passwordRef} placeholder="Leave blank to keep the same"/>
-                            </Form.Group>
-                            <Form.Group id="password-confirm">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control type="password" ref={passwordConfirmRef} placeholder="Leave blank to keep the same"/>
+                            <Form.Group>
+                                <Form.File id="photo" label="Profile Picture" onChange={handleFileUpload} ref={photoRef}/>
                             </Form.Group>
                             <Button disabled={loading} className="w-100" type="submit">Update</Button>
                         </Form>

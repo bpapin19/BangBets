@@ -1,12 +1,32 @@
 const File = require('../models/file-model');
 const multer = require('multer');
 const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
-    destination: "../public/uploads",
+    // determine if file was sent from AddSpot form or UpdateProfile form and set destination
+    destination: function(req, _destination, cb) {
+        if (req.rawHeaders.indexOf('add-spot') > 0) {
+            _destination = "../public/uploads";
+            if (!fs.existsSync(_destination)) {
+                fs.mkdirSync(_destination);
+            }
+        } else if (req.rawHeaders.indexOf('update-profile') > 0) {
+            _destination = "../public/pfps";
+            if (!fs.existsSync(_destination)) {
+                fs.mkdirSync(_destination);
+            }
+        }
+        cb(null, _destination);
+    },
+    // change file name to user email or curent date in ISO format
     filename: function(req, file, cb) {
-        var date = new Date();
-        cb(null, "" + date.toISOString().split('.')[0]+"Z" + path.extname(file.originalname));
+        if (req.rawHeaders.indexOf('update-profile') > 0) {
+            cb(null, "" + req.get('current-user-email') + ".jpg");
+        } else {
+            var date = new Date();
+            cb(null, "" + date.toISOString().split('.')[0]+"Z" + path.extname(file.originalname));
+        }
     }
  });
 

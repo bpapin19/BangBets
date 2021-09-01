@@ -25,6 +25,26 @@
     transform: translateY(-4%);
 }
 
+.sub-bar {
+    text-align: center;
+}
+
+.dropdown {
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 1000;
+  border-radius: 0 0 2px 2px;
+  text-align: center;
+  align-items: center;
+  width: 500px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
 @media (max-width:600px){
     .button-text {
       display: none;

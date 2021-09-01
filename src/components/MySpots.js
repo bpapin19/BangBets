@@ -13,7 +13,6 @@ export default function MySpots() {
     const [resSuccess, setResSuccess] = useState("");
     const [resError, setResError] = useState("");
     const [deleted, setDeleted] = useState(false);
-    const [popup, setPopup] = useState(false);
 
     function deleteSpot(spot){
         axios({
@@ -43,9 +42,9 @@ export default function MySpots() {
     return (
     <div>
         { resSuccess && 
-            <div style={{textAlign: 'center'}} class="alert alert-success">{resSuccess}</div> }
+            <div style={{textAlign: 'center'}} className="alert alert-success">{resSuccess}</div> }
         { resError && 
-            <div style={{textAlign: 'center'}} class="alert alert-danger">{resError}</div> }
+            <div style={{textAlign: 'center'}} className="alert alert-danger">{resError}</div> }
         <h1 className="title">My Spots</h1>
         <div className="spots-body">
             <div className="spot-cards">
@@ -54,7 +53,7 @@ export default function MySpots() {
                     return (
                     <div>
                         <div className="container">
-                            <div className="card">
+                            <div key={spot._id} className="card">
                                 <div className="card-header">
                                     <img src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                                 </div>
@@ -69,7 +68,7 @@ export default function MySpots() {
                                     <h4>{spot.name}</h4>
                                     <p>{spot.desc}</p>
                                     <div className="footer">
-                                        <small>{moment(spot.createdAt, "YYYYMMDD").fromNow()}</small>
+                                        <small>{moment(spot.createdAt).fromNow()}</small>
                                     </div>
                                 </div>
                             </div>

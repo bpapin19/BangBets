@@ -57,7 +57,8 @@ export default function NavBar() {
             activeClassName="text-blue-100 bg-blue-700"
             className="navlink-title"
           >
-            {currentUserName}
+            <img className="pfp" src={`/pfps/${currentUser.email + ".jpg"}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
+            <span className="username">{currentUserName}</span>
           </NavLink>
         }
         </div>

@@ -41,7 +41,25 @@
 
 .middle {
     align-items: center;
-    margin-right: 20px;
+}
+
+.pfp {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.pfp-big {
+    height: 200px;
+    width: 200px;
+    display:block;
+    margin: auto;
+    margin-bottom: 20px;
+    border: 3px solid rgb(75, 75, 75);
+}
+
+.username {
+    padding-left: 10px;
 }
 
 @media (max-width:800px){
@@ -51,5 +69,14 @@
 
     .site-title {
         font-size: 16px;
+    }
+
+    .username {
+        display: none;
+    }
+
+    .pfp {
+        height: 30px;
+        width: 30px;
     }
   }

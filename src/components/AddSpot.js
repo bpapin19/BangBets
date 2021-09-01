@@ -37,13 +37,15 @@ export default function AddSpot() {
   async function handleSubmit(e) {
       e.preventDefault();
 
+      // Handle spot photo file upload
       const formData = new FormData();
 
       const config = {
         headers: {
-            'content-type': 'multipart/form-data'
+            'content-type': 'multipart/form-data',
+            'from': 'add-spot'
         }
-    };
+      };
 
         if (error === "") {
           try {
@@ -85,7 +87,6 @@ export default function AddSpot() {
 
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]);
-    console.log(e.target.files[0])
   }
 
   const handleChange = e => {

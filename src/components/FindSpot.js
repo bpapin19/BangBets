@@ -77,7 +77,8 @@ export default function FindSpot() {
           <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) =>
               <div className="sub-bar">
-                  <label style={{margin:"15px"}}>Search for Spots</label>
+                  <label style={{margin:"15px", fontSize:"25px"}}>Search for Spots</label>
+                  <div>
                   <input {...getInputProps({className: 'search-input'})} />
                   {address.length > 0 && (
                       <button
@@ -86,24 +87,26 @@ export default function FindSpot() {
                       >
                         x
                       </button>
-                    )}
+                  )}
                   <button className="use-curr-button" onClick={() => getCurrentLocation()}><BiCurrentLocation className="icon"/><span className="button-text">Use Current Location</span></button>
-                <div className="dropdown">
-                  {loading ? <div className="dropdown">loading...</div> : null}
-                  {suggestions.map(suggestion => {
-                    const style = suggestion.active
-                    ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white"}
-                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  <div style={{padding: "10px"}}></div>
+                  </div>
+                  <div className="dropdown">
+                    {loading ? <div className="dropdown">loading...</div> : null}
+                    {suggestions.map(suggestion => {
+                      const style = suggestion.active
+                      ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white"}
+                      : { backgroundColor: '#ffffff', cursor: 'pointer' };
 
-                    return (
-                      <div {...getSuggestionItemProps(suggestion, { style })}>
-                        {suggestion.description}
-                      </div>
-                    );
-                  })}
+                      return (
+                        <div {...getSuggestionItemProps(suggestion, { style })}>
+                          {suggestion.description}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            }
+              }
           </PlacesAutocomplete>
           {coordinates === "" ?
           <div>Loading Map...</div> :
