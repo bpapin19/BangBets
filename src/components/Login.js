@@ -35,7 +35,7 @@ export default function Login() {
         <>
         <Container
                 className="d-flex justify-content-center"
-                style={{ minHeight: "100vh" }}
+                style={{ minHeight: "100vh", paddingTop: "30px" }}
             >
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <div style={borderStyles}>

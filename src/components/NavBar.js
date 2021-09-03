@@ -8,7 +8,9 @@ export default function NavBar() {
   const [currentUserName, setCurrentUserName] = useState();
 
   useEffect(() => {
-    setCurrentUserName(currentUser.displayName);
+    if (currentUser !== null) {
+      setCurrentUserName(currentUser.displayName);
+    }
   }, [])
 
   return (

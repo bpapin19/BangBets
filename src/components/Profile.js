@@ -29,7 +29,7 @@ export default function Profile() {
 
     return (
         <>
-        <Container className="d-flex justify-content-center">
+        <Container style={{paddingTop: "30px"}} className="d-flex justify-content-center">
             <div className="w-100" style={{maxWidth: "400px"}}>
                 <div style={ borderStyles }>
                     <Card.Body>

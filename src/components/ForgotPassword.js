@@ -1,7 +1,7 @@
 import React, {useRef, useState} from "react";
 import {Form, Button, Card, Container, Alert} from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 export default function ForgotPassword() {
     const emailRef = useRef();
@@ -14,25 +14,31 @@ export default function ForgotPassword() {
         e.preventDefault();
 
         try {
-            setMessage("")
-            setError("")
-            setLoading(true)
-            await resetPassword(emailRef.current.value)
-            setMessage("Check your inbox for further instructions")
+            setMessage("");
+            setError("");
+            setLoading(true);
+            await resetPassword(emailRef.current.value);
+            setMessage("Check your inbox for further instructions");
         } catch {
-            setError("Failed to reset password")
+            setError("Failed to reset password");
         }
-        setLoading(false)
+        setLoading(false);
+    }
+
+    const borderStyles = {
+        borderRadius: "10px",
+        boxShadow: "0 2px 20px rgba(0, 0, 0, 0.2)",
+        width: "100%",
     }
     
     return (
         <>
         <Container
                 className="d-flex justify-content-center"
-                style={{ minHeight: "100vh" }}
+                style={{ minHeight: "100vh", paddingTop: "30px" }}
             >
             <div className="w-100" style={{ maxWidth: "400px" }}>
-                <Card>
+                <div style={borderStyles}>
                     <Card.Body>
                         <h2 className="text-center mb-4">Password Reset</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
@@ -48,7 +54,7 @@ export default function ForgotPassword() {
                     <Link to='/login'>Login</Link>
                 </div>
                     </Card.Body>
-                </Card>
+                </div>
                 <div className="w-100 text-center mt-2">
                     Need an account? <Link to='/signup'>Sign Up</Link>
                 </div>

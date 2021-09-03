@@ -82,16 +82,25 @@ export default function MapContainer(props) {
             onCloseClick={onInfoWindowClose}
             position={{lat: spot.lat, lng: spot.lng}}
             >
-              <div className="iw-container">       
-                <strong className="iw-title">{spot.name}</strong>
-                <div className="iw-content">
-                  <a href={'https://maps.google.com/?ll=' + spot.lat + ',' + spot.lng} target= "_blank" rel="noreferrer" className="iw-subTitle">{spot.location}<span className="tooltiptext">Open in GoogleMaps</span></a>
-                  <div><b>Added By: </b>{spot.user}</div>
-                  <div><b>Type: </b>{spot.type}</div>
-                  <div><b>Description: </b>{spot.desc}</div>
-                  <div><b>Posted on: </b>{moment(spot.createdAt).format("MMM Do YYYY")}</div>
-                  {/* <img src={`/uploads/${spot.createdAt.split('.')[0]+"Z"}.jpg`}> </img> */}
+              <div>
+                <div className="card-body">
+                  <div className="">
+                      <img className="map-image" src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
+                  </div>
+                  <div className="card-body-header">
+                      <span className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span>
+                  </div>
+                  <div>
+                    <h4>{spot.name}</h4>
+                  </div>
+                  <p style={{color: "gray"}}>{spot.desc}</p>
+                  <div>{spot.location}</div>
+                  <div className="footer">
+                      <div>{moment(spot.createdAt).format("MMM Do YYYY")}</div>
+                      <div>{spot.user}</div>
+                  </div>
                 </div>
+                  
               </div>
               </InfoWindow>}
             </Marker>

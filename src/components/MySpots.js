@@ -25,6 +25,14 @@ export default function MySpots() {
           });
     }
 
+    function reverseArray(spotsArray) {
+        var reversedSpotsArray = new Array;
+        for(var i = spotsArray.length-1; i >= 0; i--) {
+            reversedSpotsArray.push(spotsArray[i]);
+        }
+    return reversedSpotsArray;
+    }
+
     useEffect(() => {
         try {
           axios({
@@ -48,16 +56,16 @@ export default function MySpots() {
         <h1 className="title">My Spots</h1>
         <div className="spots-body">
             <div className="spot-cards">
-            {spotsArray.map(spot => {
+            {reverseArray(spotsArray).map(spot => {
                 if (spot.user === currentUser.displayName) {
                     return (
                     <div>
                         <div className="container">
                             <div key={spot._id} className="card">
                                 <div className="card-header">
-                                    <img src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
+                                    <img style={{objectFit: "cover"}} src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                                 </div>
-                                <div className="card-body">
+                                <div className="spots-card-body">
                                     <div className="card-body-header">
                                         <span className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span>
                                         <div className="btn-container">
@@ -66,7 +74,7 @@ export default function MySpots() {
                                         </div>
                                     </div>
                                     <h4>{spot.name}</h4>
-                                    <p>{spot.desc}</p>
+                                    <p style={{color: "gray"}}>{spot.desc}</p>
                                     <div className="footer">
                                         <small>{moment(spot.createdAt).fromNow()}</small>
                                     </div>

@@ -32,13 +32,15 @@
   object-fit: cover;
 }
 
-.card-body {
+.spots-card-body {
   display: flex;
   flex-direction: column;
   justify-content: top;
   align-items: flex-start;
   padding: 20px;
   min-height: 250px;
+  overflow: auto;
+  max-height: 250px;
 }
 
 .spot-cards {
@@ -79,6 +81,8 @@
 .footer {
     position: absolute;
     bottom: 10px;
+    background-color: #fff;
+    width: 100%;
 }
 
 .spots-btn {

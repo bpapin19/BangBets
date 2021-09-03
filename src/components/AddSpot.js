@@ -23,11 +23,11 @@ export default function AddSpot() {
 
   useEffect(() => {
     if (file !== null){
-      if (file.size > 1000000) {
+      if (file.size > 4000000) {
         setError("File too large, uploads limited to 1MB");
         setSuccess("");
-      } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png')) {
-        setError("Only jpeg and png formats are supported");
+      } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png') && (file.type !== 'image/heic')) {
+        setError("Only JPG, PNG, and HEIC formats are supported");
       } else {
         setError("");
       }
@@ -102,7 +102,7 @@ export default function AddSpot() {
     <>
     <Container
             className="d-flex justify-content-center"
-            style={{ minHeight: "100vh"}}
+            style={{ minHeight: "100vh", paddingTop: "30px"}}
         >
         <div className="w-100" style={{ maxWidth: "400px" }}>
           { success && 

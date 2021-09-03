@@ -2,16 +2,19 @@ import React, {useState, useEffect } from "react";
 import MapContainer from "./Map";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import './FindSpotStyles.css';
-import {BiCurrentLocation} from "react-icons/bi";
+import {TiLocationArrow} from "react-icons/ti";
 
 export default function FindSpot() {
 
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getCurrentLocation = () => {
+    setLoading(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(getCurrentCoords, errorCallback, {timeout:5000, enableHighAccuracy:true});
+      setLoading(false);
     } else {
       alert("Geolocation is not available");
     }
@@ -88,7 +91,7 @@ export default function FindSpot() {
                         x
                       </button>
                   )}
-                  <button className="use-curr-button" onClick={() => getCurrentLocation()}><BiCurrentLocation className="icon"/><span className="button-text">Use Current Location</span></button>
+                  <button className="use-curr-button" onClick={() => getCurrentLocation()}><TiLocationArrow size={20} className="icon"/><span className="button-text">Use Current Location</span></button>
                   <div style={{padding: "10px"}}></div>
                   </div>
                   <div className="dropdown">
@@ -108,6 +111,7 @@ export default function FindSpot() {
                 </div>
               }
           </PlacesAutocomplete>
+          {loading && <div>loading current location</div>}
           {coordinates === "" ?
           <div>Loading Map...</div> :
           <MapContainer lat={coordinates.lat} lng={coordinates.lng} zoomLevel={17}/>

@@ -61,7 +61,7 @@ export default function UpdateProfile() {
             Promise.all(promises).then(() => {
                 history.push('/profile');
             }).catch(() => {
-                setError("Failed to update account");
+                setError("Failed to update account. Make sure your email address is valid");
             }).finally(() => {
                 setLoading(false);
             })
@@ -81,7 +81,7 @@ export default function UpdateProfile() {
         <>
         <Container
                 className="d-flex justify-content-center"
-                style={{ minHeight: "100vh"}}
+                style={{ minHeight: "100vh", paddingTop: "30px"}}
             >
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <div style={borderStyles}>
