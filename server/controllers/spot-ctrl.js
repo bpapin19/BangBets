@@ -17,9 +17,6 @@ createSpot = (req, res) => {
         return res.status(400).json({ success: false, error: err });
     }
 
-    console.log(spot);
-    console.log(body);
-
     spot
         .save()
         .then(() => {

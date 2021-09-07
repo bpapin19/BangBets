@@ -16,8 +16,8 @@ export default function UpdateProfile() {
 
     useEffect(() => {
         if (file !== null){
-          if (file.size > 1000000) {
-            setError("File too large, uploads limited to 1MB");
+          if (file.size > 4000000) {
+            setError("File too large, uploads limited to 4MB");
           } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png')) {
             setError("Only jpeg and png formats are supported");
           } else {
@@ -43,7 +43,7 @@ export default function UpdateProfile() {
         if (error === "") {
             if (file != null) {
                 formData.append('myfile', file);
-                axios.post("http://localhost:3001/api/files", formData, config, currentUser.email);
+                axios.post("/api/files", formData, config, currentUser.email);
             }
 
             const promises = [];

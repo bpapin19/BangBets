@@ -4,9 +4,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useHistory } from "react-router-dom";
 
 export default function Profile() {
-    const  [error, setError] = useState("")
-    const { currentUser, logout } = useAuth()
-    const history  = useHistory()
+    const  [error, setError] = useState("");
+    const { currentUser, logout } = useAuth();
+    const history  = useHistory();
 
     async function handleLogout() {
         setError('')

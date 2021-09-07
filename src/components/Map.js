@@ -7,6 +7,8 @@ import axios from 'axios';
 import spotIcon from '../spotIcon.svg';
 import parkIcon from '../parkIcon.svg';
 import moment from 'moment';
+import { GiPositionMarker } from 'react-icons/gi';
+import { GrMap } from 'react-icons/gr';
 
 const mapContainerStyle = {
   width: '100vw',
@@ -34,7 +36,7 @@ export default function MapContainer(props) {
   }
 
   function onInfoWindowClose() {
-    console.log("onclose");
+
     setShowingInfoWindow(false);
   }
 
@@ -42,7 +44,7 @@ export default function MapContainer(props) {
     try {
       axios({
         method: 'get',
-        url: "http://localhost:3001/api/spots"
+        url: "/api/spots"
       })
       .then(res => {
         setSpotsArray(res.data.data);
@@ -84,20 +86,17 @@ export default function MapContainer(props) {
             >
               <div>
                 <div className="card-body">
-                  <div className="">
+                  <div>
                       <img className="map-image" src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                   </div>
-                  <div className="card-body-header">
-                      <span className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span>
+                  <div className="name-location">
+                    <h4>{spot.name}<span style={{marginLeft: "10px"}} className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span></h4>
+                    <div style={{fontSize: "15px"}}><GiPositionMarker style={{marginRight: "4px"}} size={15}/>{spot.location}</div>
+                    <a href={`https://maps.google.com/?ll=${spot.lat}, ${spot.lng}`} target="_blank"><GrMap style={{marginLeft: "1px", marginRight: "5px"}}/>Open in Google Maps</a>
                   </div>
-                  <div>
-                    <h4>{spot.name}</h4>
-                  </div>
-                  <p style={{color: "gray"}}>{spot.desc}</p>
-                  <div>{spot.location}</div>
+                  <p style={{color: "gray", paddingBottom: "0px", fontSize: "15px"}}>{spot.desc}</p>
                   <div className="footer">
-                      <div>{moment(spot.createdAt).format("MMM Do YYYY")}</div>
-                      <div>{spot.user}</div>
+                      <div>Uploaded on {moment(spot.createdAt).format("MMM Do YYYY")} by {spot.user}</div>
                   </div>
                 </div>
                   

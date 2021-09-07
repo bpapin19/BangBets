@@ -2,6 +2,7 @@ import {React, useState, useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import './NavBar.css';
 import { useAuth } from '../contexts/AuthContext';
+import logo from '../stairs.svg'
 
 export default function NavBar() {
   const {currentUser} = useAuth();
@@ -11,7 +12,7 @@ export default function NavBar() {
     if (currentUser !== null) {
       setCurrentUserName(currentUser.displayName);
     }
-  }, [])
+  }, [currentUser]);
 
   return (
     <header className="navbar">
@@ -24,7 +25,7 @@ export default function NavBar() {
                     activeClassName="text-black"
                     className="site-title"
                 >
-                    SpotTracker
+                    <img className="logo" src={logo}/>SpotTracker
                 </NavLink>
             </div>
             <nav className="middle">

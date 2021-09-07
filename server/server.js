@@ -6,7 +6,7 @@ const path = require('path');
 const spotRouter = require('./routes/spot-router');
 
 const app = express();
-const apiPort = 3001;
+const apiPort = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

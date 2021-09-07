@@ -8,7 +8,6 @@ import {BiRefresh} from "react-icons/bi";
     const [coords, setCoords] = useState("");
 
     const getLocation = () => {
-      console.log("fuck")
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(getCoords, getError, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
       } else {
@@ -45,7 +44,7 @@ import {BiRefresh} from "react-icons/bi";
     return (
     <div className="app">
       {coords === "" 
-      ? <div style={{marginLeft: "10px"}}>Loading Current Location...</div>
+      ? <div style={{marginLeft: "20px"}}>Loading Current Location...</div>
       : null
       }
       <button className="home-refresh-button" onClick={() => refreshLocation()}><BiRefresh className="refresh-icon" size={22}/>Refresh Location</button>

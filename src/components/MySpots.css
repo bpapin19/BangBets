@@ -43,6 +43,18 @@
   max-height: 250px;
 }
 
+.no-spots-card-body {
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 200px;
+  text-align: center;
+}
+
+.no-spots-img {
+  height: 7px;
+}
+
 .spot-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -53,7 +65,8 @@
 .tag {
   border-radius: 50px;
   font-size: 12px;
-  margin: 0;
+  margin: auto;
+  vertical-align: middle;
   color: #fff;
   padding: 2px 10px;
   text-transform: uppercase;

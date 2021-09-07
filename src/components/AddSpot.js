@@ -24,7 +24,7 @@ export default function AddSpot() {
   useEffect(() => {
     if (file !== null){
       if (file.size > 4000000) {
-        setError("File too large, uploads limited to 1MB");
+        setError("File too large, uploads limited to 4MB");
         setSuccess("");
       } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png') && (file.type !== 'image/heic')) {
         setError("Only JPG, PNG, and HEIC formats are supported");
@@ -47,35 +47,33 @@ export default function AddSpot() {
         }
       };
 
-        if (error === "") {
-          try {
+      if (error === "") {
+        formData.append('myfile', file);
+        axios.post("/api/files", formData, config);
 
-            formData.append('myfile', file);
-            axios.post("http://localhost:3001/api/files", formData, config);
-
-            axios({
-              method: 'post',
-              url: "http://localhost:3001/api/spot",
-              data: {
-                user: currentUser.displayName,
-                name: nameRef.current.value,
-                location: address,
-                lat: coordinates.lat,
-                lng: coordinates.lng,
-                desc: descriptionRef.current.value,
-                type: type,
-                photo: file.name,
-              }
-            })
-            .then(res => {
-                setSuccess(res.data.message);
-            })
-            e.target.reset();
-            setAddress("");
-          } catch {
-            setError('Unable to add your spot')
+        axios({
+          method: 'post',
+          url: "/api/spot",
+          data: {
+            user: currentUser.displayName,
+            name: nameRef.current.value,
+            location: address,
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+            desc: descriptionRef.current.value,
+            type: type,
+            photo: file.name,
           }
-        }
+        })
+        .then(res => {
+            setSuccess(res.data.message);
+        })
+        .catch(function() {
+          setError("Unable to add your spot");
+        });
+        e.target.reset();
+        setAddress("");
+      }
     }
 
   const handleSelect = async (value) => {
@@ -128,7 +126,6 @@ export default function AddSpot() {
                                       const style = suggestion.active
                                       ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white" }
                                       : { backgroundColor: '#ffffff', cursor: 'pointer' };
-
                                       return (
                                       <div {...getSuggestionItemProps(suggestion, { style })}>
                                         {suggestion.description}

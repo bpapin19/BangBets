@@ -32,8 +32,6 @@
     display: inline-block;
 }
 
-.title:hover .title2 { color: white; }
-
 .text {
     float: right;
     padding-left: 5px;
@@ -64,6 +62,10 @@
     padding-left: 10px;
 }
 
+.site-title:hover .logo{
+    filter: invert(21%) sepia(49%) saturate(3375%) hue-rotate(201deg) brightness(93%) contrast(105%);
+}
+
 @media (max-width:800px){
     .navlink-title {
         font-size: 13px;
@@ -80,5 +82,9 @@
     .pfp {
         height: 30px;
         width: 30px;
+    }
+
+    .logo {
+        display: none;
     }
   }

@@ -39,7 +39,6 @@ export default function FindSpot() {
           }
         })
         .catch((e) => {
-          console.log('Error in getAddressFromCoordinates', e);
           resolve();
         });
     });
