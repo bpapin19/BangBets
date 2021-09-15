@@ -14,9 +14,6 @@ export default function Profile(props) {
     
     useEffect(() => {
         setImageLink();
-        return () => {
-            setImg({});
-        };
     }, []);
 
     const setImageLink = () => {
@@ -26,7 +23,7 @@ export default function Profile(props) {
                 setLoading(true);
                 props.setShouldUpdate(true);
                 // set load time based on how big the file is to give AWS time to upload the file
-                loadingTime = history.location.state.fileSize/1000 + 500;
+                loadingTime = history.location.state.fileSize/1000 + 1000;
             }
         }
         setTimeout(() => {
@@ -36,10 +33,6 @@ export default function Profile(props) {
             history.replace({pathname: '/profile', state: {from: 'fromProfile'}});
         }, loadingTime);
     };
-
-    useEffect(() => {
-        
-    }, []);
 
     async function handleLogout() {
         setError('')

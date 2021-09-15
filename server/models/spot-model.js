@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const spotSchema = new Schema(
     {
+        userId: { type: String },
         user: { type: String },
         name: { type: String },
         location: { type: String },

@@ -55,6 +55,7 @@ export default function AddSpot() {
           method: 'post',
           url: "http://localhost:3001/api/spot",
           data: {
+            userId: currentUser.uid,
             user: currentUser.displayName,
             name: nameRef.current.value,
             location: address,

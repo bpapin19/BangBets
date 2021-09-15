@@ -59,9 +59,14 @@ export default function UpdateProfile() {
             }
 
             Promise.all(promises).then(() => {
-                history.push({pathname: '/profile', state: {from: 'fromUpdate', fileSize: file.size}});
-            }).catch(() => {
-                setError("Failed to update account. Make sure your email address is valid");
+                if (file !== null){
+                    history.push({pathname: '/profile', state: {from: 'fromUpdate', fileSize: file.size}});
+                } else {
+                    history.push({pathname: '/profile'});
+                }
+            }).catch((error) => {
+                console.log(error)
+                setError(error.message);
             }).finally(() => {
                 setLoading(false);
             });

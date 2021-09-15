@@ -47,7 +47,7 @@ export default function MySpots() {
 
     useEffect(() => {
         spotsArray.filter(spot => {
-            if (spot.user === currentUser.displayName) {
+            if (spot.userId === currentUser.uid) {
                 setNoSpots(false);
             } else {
                 setNoSpots(true);
@@ -82,7 +82,7 @@ export default function MySpots() {
         <div className="spots-body">
             <div className="spot-cards">
             {reverseArray(spotsArray).map(spot => {
-                if (spot.user === currentUser.displayName) {
+                if (spot.userId === currentUser.uid) {
                     return (
                     <div>
                         <div className="container">
