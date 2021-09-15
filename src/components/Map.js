@@ -36,7 +36,6 @@ export default function MapContainer(props) {
   }
 
   function onInfoWindowClose() {
-
     setShowingInfoWindow(false);
   }
 
@@ -44,7 +43,7 @@ export default function MapContainer(props) {
     try {
       axios({
         method: 'get',
-        url: "/api/spots"
+        url: "http://localhost:3001/api/spots"
       })
       .then(res => {
         setSpotsArray(res.data.data);
@@ -87,7 +86,7 @@ export default function MapContainer(props) {
               <div>
                 <div className="card-body">
                   <div>
-                      <img className="map-image" src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
+                      <img className="map-image" src={`https://s3-us-west-1.amazonaws.com/skate-spot-tracker/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                   </div>
                   <div className="name-location">
                     <h4>{spot.name}<span style={{marginLeft: "10px"}} className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span></h4>

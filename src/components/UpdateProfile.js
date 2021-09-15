@@ -16,8 +16,8 @@ export default function UpdateProfile() {
 
     useEffect(() => {
         if (file !== null){
-          if (file.size > 4000000) {
-            setError("File too large, uploads limited to 4MB");
+          if (file.size > 5000000) {
+            setError("File too large, uploads limited to 5MB");
           } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png')) {
             setError("Only jpeg and png formats are supported");
           } else {
@@ -36,14 +36,14 @@ export default function UpdateProfile() {
             headers: {
                 'content-type': 'multipart/form-data',
                 'from': 'update-profile',
-                'current-user-email': currentUser.email,
+                'current-user-id': currentUser.uid,
             }
           };
 
         if (error === "") {
             if (file != null) {
                 formData.append('myfile', file);
-                axios.post("/api/files", formData, config, currentUser.email);
+                axios.post("http://localhost:3001/api/files", formData, config);
             }
 
             const promises = [];
@@ -54,17 +54,17 @@ export default function UpdateProfile() {
                 promises.push(updateEmail(emailRef.current.value));
             }
 
-            if (usernameRef.current.value) {
+            if (usernameRef.current.value !== currentUser.displayName) {
                 promises.push(updateUsername(usernameRef.current.value));
             }
 
             Promise.all(promises).then(() => {
-                history.push('/profile');
+                history.push({pathname: '/profile', state: {from: 'fromUpdate', fileSize: file.size}});
             }).catch(() => {
                 setError("Failed to update account. Make sure your email address is valid");
             }).finally(() => {
                 setLoading(false);
-            })
+            });
         }
     }
 

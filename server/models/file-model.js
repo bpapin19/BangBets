@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const fileSchema = new Schema(
     {
-    meta_data:{}
+    meta_data: {}
     }
 );
 

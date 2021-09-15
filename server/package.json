@@ -16,7 +16,7 @@
     "fs": "0.0.1-security",
     "gridfs-stream": "^1.1.1",
     "mongoose": "^5.13.2",
-    "nodemon": "^2.0.12"
-  },
-  "proxy": "http://localhost:3001"
+    "nodemon": "^2.0.12",
+    "sharp": "^0.29.1"
+  }
 }

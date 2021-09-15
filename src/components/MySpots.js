@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext';
 import moment from 'moment';
 import "./MySpots.css";
 import { BsTrash } from 'react-icons/bs';
-import { BsPencil } from 'react-icons/bs';
 import spotUploadImage from '../spot-upload.png';
 
 export default function MySpots() {
@@ -18,18 +17,18 @@ export default function MySpots() {
     function deleteSpot(spotToDelete){
         axios({
             method: 'delete',
-            url: `/api/spot/${spotToDelete._id}`,
+            url: `http://localhost:3001/api/spot/${spotToDelete._id}`,
           })
           .then(res => {
               setResSuccess(spotToDelete.name + " was successfully deleted");
-              var newSpotsArray = spotsArray.filter(spot => spot._id != spotToDelete._id);
+              var newSpotsArray = spotsArray.filter(spot => spot._id !== spotToDelete._id);
               if (newSpotsArray.length === 0) { setNoSpots(true);}
               setSpotsArray(newSpotsArray);
           });
     }
 
     function reverseArray(spotsArray) {
-        var reversedSpotsArray = new Array;
+        var reversedSpotsArray = new Array();
         for (var i = spotsArray.length-1; i >= 0; i--) {
             reversedSpotsArray.push(spotsArray[i]);
         }
@@ -39,15 +38,22 @@ export default function MySpots() {
     useEffect(() => {
           axios({
             method: 'get',
-            url: "/api/spots"
+            url: "http://localhost:3001/api/spots"
           })
           .then(res => {
             setSpotsArray(res.data.data);
-          })
-          .catch(function () {
-            setNoSpots(true);
           });
       }, []);
+
+    useEffect(() => {
+        spotsArray.filter(spot => {
+            if (spot.user === currentUser.displayName) {
+                setNoSpots(false);
+            } else {
+                setNoSpots(true);
+            }
+        });
+    }, [spotsArray]);
 
     return (
     <div>
@@ -82,13 +88,12 @@ export default function MySpots() {
                         <div className="container">
                             <div key={spot._id} className="card">
                                 <div className="card-header">
-                                    <img style={{objectFit: "cover"}} src={`/uploads/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
+                                    <img style={{objectFit: "cover"}} src={`https://s3-us-west-1.amazonaws.com/skate-spot-tracker/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                                 </div>
                                 <div className="spots-card-body">
                                     <div className="card-body-header">
                                         <span className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span>
                                         <div className="btn-container">
-                                            <button className="spots-btn btn-teal"><BsPencil /></button>
                                             <button className="spots-btn btn-red" onClick={() => {deleteSpot(spot) }}><BsTrash /></button>
                                         </div>
                                     </div>

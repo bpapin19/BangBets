@@ -1,20 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button, Alert, Container, Form } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useHistory } from "react-router-dom";
 
-export default function Profile() {
+export default function Profile(props) {
     const  [error, setError] = useState("");
     const { currentUser, logout } = useAuth();
     const history  = useHistory();
+    const [img, setImg] = useState({});
+    const [loading, setLoading] = useState(false);
+ 
+    var loadingTime = 0;
+    
+    useEffect(() => {
+        setImageLink();
+        return () => {
+            setImg({});
+        };
+    }, []);
+
+    const setImageLink = () => {
+        //user has navigates from updateprofile
+        if (history.location.state != null) {
+            if (history.location.state.from === 'fromUpdate') {
+                setLoading(true);
+                props.setShouldUpdate(true);
+                // set load time based on how big the file is to give AWS time to upload the file
+                loadingTime = history.location.state.fileSize/1000 + 500;
+            }
+        }
+        setTimeout(() => {
+            setImg({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()});
+            setLoading(false);
+            props.setShouldUpdate(false);
+            history.replace({pathname: '/profile', state: {from: 'fromProfile'}});
+        }, loadingTime);
+    };
+
+    useEffect(() => {
+        
+    }, []);
 
     async function handleLogout() {
         setError('')
         try {
-            await logout()
-            history.pushState('/logout')
+            await logout();
+            history.pushState('/logout');
         } catch {
-            setError('Failed to log out')
+            setError('Failed to log out');
         }
     }
 
@@ -36,7 +69,12 @@ export default function Profile() {
                         <Form style={{width: "360px"}}>
                             <h2 className="text-center mb-4">Profile</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
-                            <img className="pfp-big" src={`/pfps/${currentUser.email + ".jpg"}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
+                            {!loading &&
+                                <img className="pfp-big" src={img.url + '?' + img.hash} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
+                            }
+                            {loading &&
+                                <iframe className='pfp-big' src="https://giphy.com/embed/hWZBZjMMuMl7sWe0x8"/>
+                            }                                
                             <div style={elementStyles}>
                                 <strong>Username: </strong> 
                                 <span>{currentUser.displayName}</span>

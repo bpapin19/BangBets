@@ -23,8 +23,8 @@ export default function AddSpot() {
 
   useEffect(() => {
     if (file !== null){
-      if (file.size > 4000000) {
-        setError("File too large, uploads limited to 4MB");
+      if (file.size > 5000000) {
+        setError("File too large, uploads limited to 5MB");
         setSuccess("");
       } else if ((file.type !== 'image/jpeg') && (file.type !== 'image/png') && (file.type !== 'image/heic')) {
         setError("Only JPG, PNG, and HEIC formats are supported");
@@ -49,11 +49,11 @@ export default function AddSpot() {
 
       if (error === "") {
         formData.append('myfile', file);
-        axios.post("/api/files", formData, config);
+        axios.post("http://localhost:3001/api/files", formData, config);
 
         axios({
           method: 'post',
-          url: "/api/spot",
+          url: "http://localhost:3001/api/spot",
           data: {
             user: currentUser.displayName,
             name: nameRef.current.value,

@@ -2,39 +2,58 @@ const File = require('../models/file-model');
 const multer = require('multer');
 const path = require("path");
 const fs = require("fs");
+require('dotenv').config();
+const aws = require("aws-sdk");
+const multerS3 = require("multer-s3-transform");
+const sharp = require("sharp");
 
-const storage = multer.diskStorage({
+const s3Config = new aws.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_ACCESS_SECRET,
+    region: "us-west-1",
+});
+
+const pfp_bucket = process.env.S3_PFP_BUCKET_NAME;
+const spot_bucket = process.env.S3_SPOT_BUCKET_NAME;
+
+const s3storage = multerS3({
+    acl: "public-read",
+    s3: s3Config,
     // determine if file was sent from AddSpot form or UpdateProfile form and set destination
-    destination: function(req, _destination, cb) {
+    bucket: function(req, _bucket, cb) {
         if (req.rawHeaders.indexOf('add-spot') > 0) {
-            _destination = "../public/uploads";
-            if (!fs.existsSync(_destination)) {
-                fs.mkdirSync(_destination);
-            }
+            _bucket = spot_bucket;
         } else if (req.rawHeaders.indexOf('update-profile') > 0) {
-            _destination = "../public/pfps";
-            if (!fs.existsSync(_destination)) {
-                fs.mkdirSync(_destination);
-            }
+            _bucket = pfp_bucket;
         }
-        cb(null, _destination);
+        cb(null, _bucket);
     },
-    // change file name to user email or curent date in ISO format
-    filename: function(req, file, cb) {
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });  
+    },
+    shouldTransform: true,
+    transforms: [{
+    // change file name to user id or curent date in ISO format
+    key: function(req, file, cb) {
         if (req.rawHeaders.indexOf('update-profile') > 0) {
-            cb(null, "" + req.get('current-user-email') + ".jpg");
+            cb(null, "" + req.get('current-user-id') + ".jpg");
         } else {
             var date = new Date();
             cb(null, "" + date.toISOString().split('.')[0]+"Z" + path.extname(file.originalname));
         }
-    }
- });
+    },
+    transform: function (req, file, cb) {
+        //Perform desired transformations
+        cb(null, sharp().resize(600, 600));
+      }
+    }]
+});
 
- const upload = multer({
-    storage: storage,
- }).single("myfile");
+const upload = multer({
+    storage: s3storage,
+}).single("myfile");
 
- const file = new File();
+const file = new File();
 
 uploadFile = (req, res) => {
     upload(req, res, () => {
@@ -44,15 +63,14 @@ uploadFile = (req, res) => {
 file
     .save()
     .then(() => {
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
-            id: spot._id,
             message: 'Photo successfully uploaded',
-        })
+        });
     })
     .catch(error => {
         return res.status(400).json({
-            error,
+            error: error,
             message: 'Photo upload failed',
         });
     });
