@@ -13,10 +13,12 @@ export default function Profile(props) {
     var loadingTime = 0;
     
     useEffect(() => {
-        setImageLink();
-    }, []);
+        let isMounted = true;
+        setImageLink().then(() => {
+            if (isMounted) setImg({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()})})
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const setImageLink = () => {
+    async function setImageLink() {
         //user has navigates from updateprofile
         if (history.location.state != null) {
             if (history.location.state.from === 'fromUpdate') {
@@ -27,7 +29,6 @@ export default function Profile(props) {
             }
         }
         setTimeout(() => {
-            setImg({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()});
             setLoading(false);
             props.setShouldUpdate(false);
             history.replace({pathname: '/profile', state: {from: 'fromProfile'}});
@@ -66,7 +67,7 @@ export default function Profile(props) {
                                 <img className="pfp-big" src={img.url + '?' + img.hash} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
                             }
                             {loading &&
-                                <iframe className='pfp-big' src="https://giphy.com/embed/hWZBZjMMuMl7sWe0x8"/>
+                                <iframe title={img.hash} className='pfp-big' src="https://giphy.com/embed/hWZBZjMMuMl7sWe0x8"/>
                             }                                
                             <div style={elementStyles}>
                                 <strong>Username: </strong> 

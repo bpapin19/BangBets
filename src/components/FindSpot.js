@@ -69,10 +69,10 @@ export default function FindSpot() {
   }
 
   useEffect(() => {
-    {window.sessionStorage.getItem('SearchedLocation') === null ? getCurrentLocation()
+    window.sessionStorage.getItem('SearchedLocation') === null ? getCurrentLocation()
       : handleSelect(window.sessionStorage.getItem('SearchedLocation'));
-    }
-  },[]);
+    
+  },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="app">
@@ -101,7 +101,7 @@ export default function FindSpot() {
                       : { backgroundColor: '#ffffff', cursor: 'pointer' };
 
                       return (
-                        <div {...getSuggestionItemProps(suggestion, { style })}>
+                        <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
                           {suggestion.description}
                         </div>
                       );

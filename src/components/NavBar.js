@@ -25,9 +25,10 @@ export default function NavBar(props) {
     return () => {
         setImg2({});
     };
-}, [props]);
+}, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setImageLink = () => {
+    // Easiest solution to wait for AWS to complete upload
     setTimeout(() => {
       setImg2({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()});
     }, 1000);

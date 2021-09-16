@@ -17,4 +17,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use('/api', spotRouter);
 
+// Serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    app.use(express.static('client/build'));
+}
+
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));

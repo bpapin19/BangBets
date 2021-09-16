@@ -128,7 +128,7 @@ export default function AddSpot() {
                                       ? { backgroundColor: '#0070ff', cursor: 'pointer', color: "white" }
                                       : { backgroundColor: '#ffffff', cursor: 'pointer' };
                                       return (
-                                      <div {...getSuggestionItemProps(suggestion, { style })}>
+                                      <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
                                         {suggestion.description}
                                       </div>
                                       );

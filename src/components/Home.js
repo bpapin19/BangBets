@@ -39,7 +39,7 @@ import {BiRefresh} from "react-icons/bi";
         } else {
           setCoords({latitude: parseFloat(window.sessionStorage.getItem("currentLat")), longitude: parseFloat(window.sessionStorage.getItem("currentLng"))});
         }
-    }, [])
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
     <div className="app">

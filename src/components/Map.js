@@ -3,7 +3,6 @@ import { GoogleMap, Marker, InfoWindow, useLoadScript } from '@react-google-maps
 import mapStyles from "./mapStyles";
 import "./Map.css";
 import axios from 'axios';
-
 import spotIcon from '../spotIcon.svg';
 import parkIcon from '../parkIcon.svg';
 import moment from 'moment';
@@ -84,14 +83,14 @@ export default function MapContainer(props) {
             position={{lat: spot.lat, lng: spot.lng}}
             >
               <div>
-                <div className="card-body">
+                <div className="card-body" style={{maxWidth: "350px"}}>
                   <div>
                       <img className="map-image" src={`https://s3-us-west-1.amazonaws.com/skate-spot-tracker/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                   </div>
                   <div className="name-location">
                     <h4>{spot.name}<span style={{marginLeft: "10px"}} className={spot.type==='Spot' ? "tag tag-teal": "tag tag-orange"}>{spot.type}</span></h4>
                     <div style={{fontSize: "15px"}}><GiPositionMarker style={{marginRight: "4px"}} size={15}/>{spot.location}</div>
-                    <a href={`https://maps.google.com/?ll=${spot.lat}, ${spot.lng}`} target="_blank"><GrMap style={{marginLeft: "1px", marginRight: "5px"}}/>Open in Google Maps</a>
+                    <a href={`https://maps.google.com/?ll=${spot.lat}, ${spot.lng}`} target="_blank" rel="noreferrer"><GrMap style={{marginLeft: "1px", marginRight: "5px"}}/>Open in Google Maps</a>
                   </div>
                   <p style={{color: "gray", paddingBottom: "0px", fontSize: "15px"}}>{spot.desc}</p>
                   <div className="footer">

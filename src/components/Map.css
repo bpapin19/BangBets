@@ -11,6 +11,7 @@
 	color: white;
 	margin: 15px;
 	border-radius: 2px 2px 0 0;
+
 }
 
 .iw-title {
@@ -38,29 +39,6 @@
 	font-weight: 700;
 	padding: 5px 0;
 }
-
-.tooltiptext {
-	display: none;
-	width: 120px;
-	background-color: black;
-	color: #fff;
-	text-align: center;
-	padding: 5px 0;
-	border-radius: 6px;
-	width: 120px;
-	font-size: 10px;
-   
-	/* Position the tooltip text - see examples below! */
-	top: 100%;
-	left: 50%;
-	margin-left: -60px;
-	z-index: 1;
-  }
-  
-  /* Show the tooltip text when you mouse over the tooltip container */
-  .iw-subTitle:hover .tooltiptext {
-	display: inline;
-  }
 
   .map-image {
 	height: 250px;

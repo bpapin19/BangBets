@@ -28,7 +28,7 @@ export default function MySpots() {
     }
 
     function reverseArray(spotsArray) {
-        var reversedSpotsArray = new Array();
+        var reversedSpotsArray = [];
         for (var i = spotsArray.length-1; i >= 0; i--) {
             reversedSpotsArray.push(spotsArray[i]);
         }
@@ -52,8 +52,9 @@ export default function MySpots() {
             } else {
                 setNoSpots(true);
             }
+            return 0;
         });
-    }, [spotsArray]);
+    }, [spotsArray]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
     <div>
@@ -84,9 +85,9 @@ export default function MySpots() {
             {reverseArray(spotsArray).map(spot => {
                 if (spot.userId === currentUser.uid) {
                     return (
-                    <div>
+                    <div key={spot._id}>
                         <div className="container">
-                            <div key={spot._id} className="card">
+                            <div className="card">
                                 <div className="card-header">
                                     <img style={{objectFit: "cover"}} src={`https://s3-us-west-1.amazonaws.com/skate-spot-tracker/${spot.createdAt.split('.')[0]+"Z."+spot.photo.split('.')[1]}`} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/KGvFgV0/download.jpg'}/>
                                 </div>
@@ -108,6 +109,7 @@ export default function MySpots() {
                     </div>
                     )
                 }
+                return 0;
                 })
             }
             </div>
