@@ -43,6 +43,10 @@
     object-fit: cover;
 }
 
+.sign-in-icon {
+    display: none;
+}
+
 .pfp-big {
     height: 200px;
     width: 200px;
@@ -72,6 +76,14 @@
 
     .username {
         display: none;
+    }
+
+    .sign-in {
+        display: none;
+    }
+
+    .sign-in-icon {
+        display: inline;
     }
 
     .pfp {

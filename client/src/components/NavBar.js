@@ -2,7 +2,8 @@ import {React, useState, useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import './NavBar.css';
 import { useAuth } from '../contexts/AuthContext';
-import logo from '../stairs.svg'
+import logo from '../stairs.svg';
+import { AiOutlineUserAdd } from 'react-icons/ai';
 
 export default function NavBar(props) {
 
@@ -71,7 +72,8 @@ export default function NavBar(props) {
             activeClassName="text-blue-100 bg-blue-700"
             className="navlink-title"
           >
-            Sign In
+            <AiOutlineUserAdd size={18} className="sign-in-icon"/>
+            <span className="sign-in">Sign In</span>
           </NavLink>
         }
         {currentUser &&

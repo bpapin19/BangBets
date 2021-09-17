@@ -85,4 +85,8 @@
 	.iw-content .iw-subTitle {
 		font-size: 12px;
 	}
+
+	.home-refresh-button {
+		margin: 0 0 0px 10px;
+	}
   }  
