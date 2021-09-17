@@ -14,6 +14,8 @@ export default function UpdateProfile() {
     const history = useHistory();
     const photoRef = useRef();
 
+    var baseUrl = process.env.baseURL || "http://localhost:3001"
+
     useEffect(() => {
         if (file !== null){
           if (file.size > 5000000) {
@@ -43,7 +45,7 @@ export default function UpdateProfile() {
         if (error === "") {
             if (file != null) {
                 formData.append('myfile', file);
-                axios.post("http://localhost:3001/api/files", formData, config);
+                axios.post(baseUrl + "/api/files", formData, config);
             }
 
             const promises = [];

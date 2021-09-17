@@ -14,10 +14,12 @@ export default function MySpots() {
     const { currentUser } = useAuth();
     const [resSuccess, setResSuccess] = useState("");
 
+    var baseUrl = process.env.baseURL || "http://localhost:3001"
+
     function deleteSpot(spotToDelete){
         axios({
             method: 'delete',
-            url: `http://localhost:3001/api/spot/${spotToDelete._id}`,
+            url: `${baseUrl}/api/spot/${spotToDelete._id}`,
           })
           .then(res => {
               setResSuccess(spotToDelete.name + " was successfully deleted");
@@ -38,12 +40,12 @@ export default function MySpots() {
     useEffect(() => {
           axios({
             method: 'get',
-            url: "http://localhost:3001/api/spots"
+            url: baseUrl + "/api/spots"
           })
           .then(res => {
             setSpotsArray(res.data.data);
           });
-      }, []);
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         spotsArray.filter(spot => {

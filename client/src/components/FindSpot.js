@@ -79,7 +79,7 @@ export default function FindSpot() {
           <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) =>
               <div className="sub-bar">
-                  <label style={{margin:"15px", fontSize:"25px"}}>Search for Spots</label>
+                  <label style={{fontSize:"25px"}}>Search for Spots</label>
                   <div>
                   <input {...getInputProps({className: 'search-input'})} />
                   {address.length > 0 && (

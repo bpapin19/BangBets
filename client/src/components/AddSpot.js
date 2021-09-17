@@ -21,6 +21,8 @@ export default function AddSpot() {
   const [error, setError] = useState("");
   const [file, setFile] = useState( null );
 
+  var baseUrl = process.env.baseURL || "http://localhost:3001";
+
   useEffect(() => {
     if (file !== null){
       if (file.size > 5000000) {
@@ -49,11 +51,11 @@ export default function AddSpot() {
 
       if (error === "") {
         formData.append('myfile', file);
-        axios.post("http://localhost:3001/api/files", formData, config);
+        axios.post(baseUrl + "/api/files", formData, config);
 
         axios({
           method: 'post',
-          url: "http://localhost:3001/api/spot",
+          url: baseUrl + "/api/spot",
           data: {
             userId: currentUser.uid,
             user: currentUser.displayName,

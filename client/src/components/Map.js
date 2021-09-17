@@ -38,11 +38,13 @@ export default function MapContainer(props) {
     setShowingInfoWindow(false);
   }
 
+  var baseUrl = process.env.baseURL || "http://localhost:3001";
+
   useEffect(() => {
     try {
       axios({
         method: 'get',
-        url: "http://localhost:3001/api/spots"
+        url: baseUrl + "/api/spots"
       })
       .then(res => {
         setSpotsArray(res.data.data);
@@ -51,7 +53,7 @@ export default function MapContainer(props) {
       });
     } catch {
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,

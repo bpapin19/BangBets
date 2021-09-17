@@ -36,9 +36,9 @@ export default function NavBar(props) {
 
   return (
     <header className="navbar">
-      <div className="container mx-auto flex navbar-content">
-        <div className="container mx-auto flex justify-between">
-            <div className="inline-flex py-3 px-3 my-6">
+      <div className="container flex navbar-content">
+        <div className="container flex">
+            <div>
                 <NavLink
                     to="/"
                     exact
@@ -48,7 +48,7 @@ export default function NavBar(props) {
                     <img className="logo" alt="" src={logo}/>SpotTracker
                 </NavLink>
             </div>
-            <nav className="middle">
+            <nav>
                 <NavLink
                     to="/add-spot"
                     activeClassName="text-blue-100 bg-blue-700"
