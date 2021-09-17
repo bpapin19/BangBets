@@ -26,4 +26,4 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
+app.listen(process.env.PORT || apiPort, () => console.log(`Server running on port ${apiPort}`));
