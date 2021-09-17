@@ -86,6 +86,10 @@
 		font-size: 12px;
 	}
 
+	.refresh-text {
+		display: none;
+	}
+
 	.home-refresh-button {
 		margin: 0 0 0px 10px;
 	}

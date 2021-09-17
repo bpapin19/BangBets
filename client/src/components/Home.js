@@ -47,7 +47,7 @@ import {BiRefresh} from "react-icons/bi";
       ? <div style={{marginLeft: "20px"}}>Loading Current Location...</div>
       : null
       }
-      <button className="home-refresh-button" onClick={() => refreshLocation()}><BiRefresh className="refresh-icon" size={22}/>Refresh Location</button>
+      <button className="home-refresh-button" onClick={() => refreshLocation()}><BiRefresh className="refresh-icon" size={22}/><span className="refresh-text">Refresh Location</span></button>
       <MapContainer lat={coords.latitude} lng={coords.longitude} zoomLevel={20}/>
     </div>
     )
