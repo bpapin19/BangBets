@@ -58,8 +58,7 @@ const file = new File();
 uploadFile = (req, res) => {
     upload(req, res, () => {
        file.meta_data = req.file;
-       console.log("here")
-    });
+    }).catch((err) => {console.log(err)});
 
 file
     .save()

@@ -51,7 +51,7 @@ export default function AddSpot() {
 
       if (error === "") {
         formData.append('myfile', file);
-        axios.post(baseUrl + "/api/files", formData, config).catch(err => console.log(err));
+        axios.post(baseUrl + "/api/files", formData, config);
 
         axios({
           method: 'post',
