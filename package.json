@@ -1,64 +1,34 @@
 {
-  "name": "skatetracker",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@iconify/react": "^1.1.4",
-    "@react-google-maps/api": "^2.2.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "aws-sdk": "^2.985.0",
-    "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
-    "dotenv": "^10.0.0",
-    "firebase": "^8.3.2",
-    "google-map-react": "^2.1.9",
-    "leaflet": "^1.7.1",
-    "leaflet-geosearch": "^3.3.1",
-    "moment": "^2.29.1",
-    "multer": "^1.4.2",
-    "multer-gridfs-storage": "^5.0.0",
-    "multer-s3": "^2.9.0",
-    "multer-s3-transform": "^2.10.3",
-    "react": "^17.0.2",
-    "react-bootstrap": "^1.5.2",
-    "react-dom": "^17.0.2",
-    "react-geocode": "^0.2.3",
-    "react-geolocated": "^3.1.0",
-    "react-icons": "^4.2.0",
-    "react-leaflet": "^3.1.0",
-    "react-places-autocomplete": "^7.3.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@iconify-icons/mdi": "^1.1.14",
-    "google-maps-react": "^2.0.6"
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "body-parser": "^1.19.0",
+      "cors": "^2.8.5",
+      "express": "^4.17.1",
+      "fs": "0.0.1-security",
+      "gridfs-stream": "^1.1.1",
+      "mongoose": "^5.13.2",
+      "nodemon": "^2.0.12",
+      "sharp": "^0.29.1",
+      "@iconify/react": "^1.1.4",
+      "aws-sdk": "^2.985.0",
+      "axios": "^0.21.1",
+      "bootstrap": "^4.6.0",
+      "dotenv": "^10.0.0",
+      "firebase": "^8.3.2",
+      "multer": "^1.4.2",
+      "multer-gridfs-storage": "^5.0.0",
+      "multer-s3": "^2.9.0",
+      "multer-s3-transform": "^2.10.3",
+      "web-vitals": "^1.0.1"
+    }
   }
-}
