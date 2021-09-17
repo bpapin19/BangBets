@@ -83,12 +83,14 @@ export default function FindSpot() {
                   <div>
                   <input {...getInputProps({className: 'search-input'})} />
                   {address.length > 0 && (
+                    <span className = "clear-button-container">
                       <button
                         className="clear-button"
                         onClick={() => handleCloseClick()}
                       >
                         x
                       </button>
+                      </span>
                   )}
                   <button className="use-curr-button" onClick={() => getCurrentLocation()}><TiLocationArrow size={20} className="icon"/><span className="button-text">Use Current Location</span></button>
                   <div style={{padding: "10px"}}></div>

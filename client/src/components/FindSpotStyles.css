@@ -1,8 +1,11 @@
+.clear-button-container {
+    z-index: 2;
+    margin-left: -27px;
+}
+
 .clear-button {
     background-color: white;
     border: none;
-    z-index: 2;
-    margin-left: -33px;
 }
 
 .search-input {
@@ -49,4 +52,9 @@
     .button-text {
       display: none;
     }
+
+    .clear-button {
+        padding: auto;
+    }
+
   }
