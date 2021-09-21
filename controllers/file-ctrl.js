@@ -56,8 +56,17 @@ const upload = multer({
 const file = new File();
 
 uploadFile = (req, res) => {
-    upload(req, res, () => {
+    upload(req, res, (err) => {
        file.meta_data = req.file;
+       if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log("multer error when uploading file:", err);
+        return res.sendStatus(500);
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.log("unknown error when uploading file:", err);
+        return res.sendStatus(500);
+      }
     });
 
 file

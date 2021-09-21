@@ -38,7 +38,7 @@ export default function MapContainer(props) {
     setShowingInfoWindow(false);
   }
 
-  var baseUrl = "https://skate-spot-tracker.herokuapp.com";
+  var baseUrl = "http://localhost:3001";
 
   useEffect(() => {
     try {
