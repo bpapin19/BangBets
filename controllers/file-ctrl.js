@@ -56,43 +56,24 @@ const upload = multer({
 const file = new File();
 
 uploadFile = (req, res) => {
-    upload(req, res, (err) => {
+    upload(req, res, () => {
        file.meta_data = req.file;
-       if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        console.log("multer error when uploading file:", err);
-        return res.sendStatus(500);
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        console.log("unknown error when uploading file:", err);
-        return res.sendStatus(500);
-      }
     });
 
-try {
-    file
-        .save((err, file, rows) => {
-            if (err) {
-              console.log("error on saving in the db");
-            } else {
-              console.log(`database item has been created: ${file.filename}`);
-            }})
-        .then(() => {
-            return res.status(200).json({
-                success: true,
-                message: 'Photo successfully uploaded',
-            });
-        })
-        .catch(error => {
-            return res.status(400).json({
-                error: error,
-                message: 'Photo upload failed',
-            });
+file
+    .save()
+    .then(() => {
+        return res.status(200).json({
+            success: true,
+            message: 'Photo successfully uploaded',
         });
-    } catch(err) {
-        console.log('Error occured in saving to DB or with mail send ', err);
-      return res.sendStatus(500);
-    }
+    })
+    .catch(error => {
+        return res.status(400).json({
+            error: error,
+            message: 'Photo upload failed',
+        });
+    });
 }
 
  module.exports = {
