@@ -85,6 +85,7 @@ try {
     console.log('Error occured in saving to DB or with mail send ', err);
     return res.sendStatus(500);
 }
+}
 
  module.exports = {
     uploadFile
