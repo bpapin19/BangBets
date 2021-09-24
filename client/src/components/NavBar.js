@@ -49,22 +49,24 @@ export default function NavBar(props) {
                     <img className="logo" alt="" src={logo}/>SpotTracker
                 </NavLink>
             </div>
-            <nav>
-                <NavLink
-                    to="/add-spot"
-                    activeClassName="text-blue-100 bg-blue-700"
-                    className="navlink-title"
-                >
-                    Add a Spot
-                </NavLink>
-                <NavLink
-                    to="/find-spot"
-                    activeClassName="text-blue-100 bg-blue-700"
-                    className="navlink-title"
-                >
-                    Find a Spot
-                </NavLink>
-            </nav>
+            <div className="add-spot">
+              <nav>
+                  <NavLink
+                      to="/add-spot"
+                      activeClassName="text-blue-100 bg-blue-700"
+                      className="navlink-title"
+                  >
+                      Add a Spot
+                  </NavLink>
+                  <NavLink
+                      to="/find-spot"
+                      activeClassName="text-blue-100 bg-blue-700"
+                      className="navlink-title"
+                  >
+                      Find a Spot
+                  </NavLink>
+              </nav>
+            </div>
         <div className="inline-flex py-3 px-3 my-6">
         {!currentUser &&
           <NavLink
