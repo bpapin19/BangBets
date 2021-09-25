@@ -44,7 +44,7 @@ const s3storage = multerS3({
     },
     transform: function (req, file, cb) {
         //Perform desired transformations
-        cb(null, sharp().resize(600, 600));
+        cb(null, sharp().resize(600, 600).crop());
       }
     }]
 });
