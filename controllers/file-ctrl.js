@@ -59,29 +59,8 @@ try {
 
     uploadFile = (req, res) => {
         upload(req, res, () => {
-        file.meta_data = req.file;
+            file.meta_data = req.file;
         });
-
-    file
-        .save((err, file) => {
-            if (err) {
-                console.log("error on saving in the db");
-            } else {
-                return res.status(200).json({
-                    success: true,
-                    message: 'Photo successfully uploaded',
-                });
-            }
-        })
-        // .then(() => {
-            
-        // })
-        // .catch(error => {
-        //     return res.status(400).json({
-        //         error: error,
-        //         message: 'Photo upload failed',
-        //     });
-        // });
     }
 } catch (err) {
     console.log('Error occured in saving to DB or with mail send ', err);
