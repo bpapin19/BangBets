@@ -55,12 +55,13 @@ const upload = multer({
 
 const file = new File();
 
-uploadFile = (req, res) => {
-    upload(req, res, () => {
-       file.meta_data = req.file;
-    });
-
 try {
+
+    uploadFile = (req, res) => {
+        upload(req, res, () => {
+        file.meta_data = req.file;
+        });
+
     file
         .save((err, file) => {
             if (err) {
@@ -81,10 +82,10 @@ try {
                 message: 'Photo upload failed',
             });
         });
+    }
 } catch (err) {
     console.log('Error occured in saving to DB or with mail send ', err);
     return res.sendStatus(500);
-}
 }
 
  module.exports = {
