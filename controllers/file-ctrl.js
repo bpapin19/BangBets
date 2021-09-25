@@ -44,7 +44,7 @@ const s3storage = multerS3({
     },
     transform: function (req, file, cb) {
         //Perform desired transformations
-        cb(null, sharp().resize(600, 600).crop());
+        cb(null, sharp().resize(600, 600));
       }
     }]
 });
@@ -55,31 +55,10 @@ const upload = multer({
 
 const file = new File();
 
-try {
-
-    uploadFile = (req, res) => {
-        upload(req, res, () => {
-            file.meta_data = req.file;
-        });
-
-    file
-        .save()
-        .then(() => {
-            return res.status(200).json({
-                success: true,
-                message: 'Photo successfully uploaded',
-            });
-        })
-        .catch(error => {
-            return res.status(400).json({
-                error: error,
-                message: 'Photo upload failed',
-            });
-        });
-    }
-} catch (err) {
-    console.log('Error occured in saving to DB or with mail send ', err);
-    return res.sendStatus(500);
+uploadFile = (req, res) => {
+    upload(req, res, () => {
+        file.meta_data = req.file;
+    });
 }
 
  module.exports = {
