@@ -67,14 +67,14 @@ try {
             if (err) {
                 console.log("error on saving in the db");
             } else {
-                console.log(`database item has been created: ${file}`);
+                return res.status(200).json({
+                    success: true,
+                    message: 'Photo successfully uploaded',
+                });
             }
         })
         // .then(() => {
-        //     return res.status(200).json({
-        //         success: true,
-        //         message: 'Photo successfully uploaded',
-        //     });
+            
         // })
         // .catch(error => {
         //     return res.status(400).json({

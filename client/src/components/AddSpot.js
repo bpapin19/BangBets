@@ -166,7 +166,7 @@ export default function AddSpot() {
                             />
                         </Form.Group>
                         <Form.Group>
-                          <Form.File id="photo" label="Photo" onChange={handleFileUpload} ref={photoRef}/>
+                          <Form.File id="photo" label="Photo" onChange={handleFileUpload} ref={photoRef} required/>
                         </Form.Group>
                         <Button className="w-100" type="submit">Add Spot</Button>
                     </Form>
