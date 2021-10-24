@@ -23,14 +23,12 @@ export default function Profile(props) {
         if (history.location.state != null) {
             if (history.location.state.from === 'fromUpdate') {
                 setLoading(true);
-                props.setShouldUpdate(true);
                 // set load time based on how big the file is to give AWS time to upload the file
                 loadingTime = history.location.state.fileSize/1000 + 1000;
             }
         }
         setTimeout(() => {
             setLoading(false);
-            props.setShouldUpdate(false);
             history.replace({pathname: '/profile', state: {from: 'fromProfile'}});
         }, loadingTime);
     };
@@ -77,7 +75,6 @@ export default function Profile(props) {
                                 <strong>Email: </strong> 
                                 <span>{currentUser.email}</span>
                             </div>
-                            <Link to='/my-spots' className="btn btn-primary w-100 mb-2">My Spots</Link>
                             <Link to='/update-profile' className="btn btn-primary w-100">Update Profile</Link>
                         </Form>
                     </Card.Body>

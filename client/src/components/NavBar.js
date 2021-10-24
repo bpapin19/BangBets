@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import './NavBar.css';
 import { useAuth } from '../contexts/AuthContext';
 import logo from '../stairs.svg';
-import { AiOutlineUserAdd } from 'react-icons/ai';
 
 export default function NavBar(props) {
 
@@ -39,45 +38,37 @@ export default function NavBar(props) {
     <header className="navbar">
       <div className="container flex navbar-content">
         <div className="container flex">
-            <div>
+            {currentUser && currentUser.displayName === "client" && <div>
                 <NavLink
-                    to="/"
+                    to="/client-home"
                     exact
                     activeClassName="text-black"
                     className="site-title"
                 >
-                    <img className="logo" alt="" src={logo}/>SpotTracker
+                    <img className="logo" alt="" src={logo}/>BANG BETS
                 </NavLink>
-            </div>
-            <div className="add-spot">
-              <nav>
-                  <NavLink
-                      to="/add-spot"
-                      activeClassName="text-blue-100 bg-blue-700"
-                      className="navlink-title"
-                  >
-                      Add a Spot
-                  </NavLink>
-                  <NavLink
-                      to="/find-spot"
-                      activeClassName="text-blue-100 bg-blue-700"
-                      className="navlink-title"
-                  >
-                      Find a Spot
-                  </NavLink>
-              </nav>
-            </div>
+            </div>}
+            {currentUser && currentUser.displayName === "bookie" && <div>
+                <NavLink
+                    to="/bookie-home"
+                    exact
+                    activeClassName="text-black"
+                    className="site-title"
+                >
+                    <img className="logo" alt="" src={logo}/>BANG BETS
+                </NavLink>
+            </div>}
+            {currentUser && currentUser.displayName === "client" && <div>
+                <NavLink
+                    to="/football-bets"
+                    exact
+                    activeClassName="text-black"
+                    className="site-title"
+                >
+                    <div>Football</div>
+                </NavLink>
+            </div>}
         <div className="inline-flex py-3 px-3 my-6">
-        {!currentUser &&
-          <NavLink
-            to="/login"
-            activeClassName="text-blue-100 bg-blue-700"
-            className="navlink-title"
-          >
-            <AiOutlineUserAdd size={18} className="sign-in-icon"/>
-            <span className="sign-in">Sign In</span>
-          </NavLink>
-        }
         {currentUser &&
           <NavLink
             to="/profile"

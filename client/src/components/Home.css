@@ -1,0 +1,17 @@
+.top-panel {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.icon {
+    color: black;
+    width: 100px;
+}
+
+.icon:hover {
+    text-decoration: none;
+    color: rgb(193, 36, 36);
+}

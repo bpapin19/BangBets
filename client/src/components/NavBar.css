@@ -2,25 +2,35 @@
     display: flex;
     justify-content: center;
     z-index: 10;
+    background-color: #ffffff;
 }
 
 .navlink-title {
-    color: black;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    padding: 0 5px;
+}
+
+.navlink-title:hover {
+    color: rgb(193, 36, 36);
     text-decoration: none;
     padding: 0 5px;
 }
 
 .site-title {
-    color: black;
+    color: rgb(193, 36, 36);
     text-decoration: none;
     font-size: 25px;
+}
+
+.login-button, .join-button {
+    display: inline-block;
+    width: 60px;
 }
 
 .site-title:hover, .navlink-title:hover{
     text-decoration: none;
 }
-
-
   
 .pin {
     position: fixed;

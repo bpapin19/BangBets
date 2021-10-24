@@ -1,7 +1,8 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {Form, Button, Card, Container, Alert} from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
+import './Login.css';
 
 export default function Login() {
     const emailRef = useRef();
@@ -9,20 +10,79 @@ export default function Login() {
     const { login } = useAuth();
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
-    const history = useHistory()
+    const [client, setClient] = useState(false);
+    const [bookie, setBookie] = useState(false);
+    const [userType, setUserType] = useState("client");
+    const history = useHistory();
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         try {
             setError("")
-            setLoading(true)
-            await login(emailRef.current.value, passwordRef.current.value)
-            history.push('/')
+            setLoading(true);
+            if (client) {
+                if (emailRef.current.value !== "joselopez@gmail.com") {
+                    await login(emailRef.current.value, passwordRef.current.value);
+                    history.push('/client-home');
+                } else {
+                    setError("Failed to sign in");
+                }
+            } else if (bookie) {
+                if (emailRef.current.value === "newertest@gmail.com") {
+                    await login(emailRef.current.value, passwordRef.current.value);
+                    history.push('/bookie-home');
+                } else {
+                    setError("Failed to sign in");
+                }
+            }
         } catch {
-            setError("Failed to sign in")
+            setError("Failed to sign in");
         }
-        setLoading(false)
+        setLoading(false);
+    }
+
+    var bookieButton;
+    var clientButton;
+    var submitButton;
+
+    useEffect(() => {
+        bookieButton = document.getElementById("bookie-button");
+        clientButton = document.getElementById("client-button");
+        submitButton = document.getElementById("submit-button");
+    });
+
+    useEffect(() => {
+        clientButton.classList.add("client-selected");
+        setClient(true);
+    }, []);
+
+    function handleClient() {
+        setClient(true);
+        setBookie(false);
+        setUserType("client");
+        clientButton.classList.add("client-selected");
+        submitButton.classList.add("client-submit");
+        if (bookieButton.classList.contains("bookie-selected")) {
+            bookieButton.classList.remove("bookie-selected");
+        }
+        if (submitButton.classList.contains("bookie-submit")) {
+            submitButton.classList.remove("bookie-submit");
+        }
+    }
+
+    function handleBookie() {
+        setBookie(true);
+        setClient(false);
+        setUserType("bookie");
+        bookieButton.classList.add("bookie-selected");
+        submitButton.classList.add("bookie-submit");
+        if (clientButton.classList.contains("client-selected")) {
+            clientButton.classList.remove("client-selected");
+        }
+        if (submitButton.classList.contains("client-submit")) {
+            submitButton.classList.remove("client-submit");
+        }
     }
 
     const borderStyles = {
@@ -39,6 +99,11 @@ export default function Login() {
             >
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <div style={borderStyles}>
+                    <div className="top-buttons">
+                        <button onClick={() => handleClient()} id="client-button" className="client-button">Client</button>
+                        <button onClick={() => handleBookie()} id="bookie-button" className="bookie-button">Bookie</button>
+                    </div>
+                    <hr className="divider"/>
                     <Card.Body>
                         <h2 className="text-center mb-4">Login</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
@@ -51,15 +116,12 @@ export default function Login() {
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" ref={passwordRef} required />
                             </Form.Group>
-                            <Button disabled={loading} className="w-100" type="submit">Login</Button>
+                            <Button disabled={loading} id="submit-button" className="submit-button" type="submit">Login</Button>
                         </Form>
                         <div className="w-100 text-center mt-3">
-                    <Link to='/forgot-password'>Forgot password? </Link>
+                    <Link to='/forgot-password' className="forgot-password">Forgot password? </Link>
                 </div>
                     </Card.Body>
-                </div>
-                <div className="w-100 text-center mt-2">
-                    Need an account? <Link to='/signup'>Sign Up</Link>
                 </div>
             </div>
         </Container>
