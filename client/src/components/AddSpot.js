@@ -21,7 +21,7 @@ export default function AddSpot() {
   const [error, setError] = useState("");
   const [file, setFile] = useState( null );
 
-  var baseUrl = "https://skate-spot-tracker.herokuapp.com";
+  var baseUrl = process.env.REACT_APP_ROUTE_URL;
 
   useEffect(() => {
     if (file !== null){

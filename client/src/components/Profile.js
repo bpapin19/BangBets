@@ -69,7 +69,7 @@ export default function Profile(props) {
                             }                                
                             <div style={elementStyles}>
                                 <strong>Username: </strong> 
-                                <span>{currentUser.displayName}</span>
+                                <span>{currentUser.email.substring(0, currentUser.email.indexOf('@'))}</span>
                             </div>
                             <div style={elementStyles}>
                                 <strong>Email: </strong> 

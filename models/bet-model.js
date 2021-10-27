@@ -1,20 +1,19 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const spotSchema = new Schema(
+const betSchema = new Schema(
     {
         userId: { type: String },
-        user: { type: String },
+        user_email: { type: String },
         name: { type: String },
         location: { type: String },
         lat: { type: Number },
         lng: { type: Number },
         desc: { type: String },
         type: { type: String },
-        photo: { type: String },
         
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model('spots', spotSchema);
+module.exports = mongoose.model('bets', betSchema);

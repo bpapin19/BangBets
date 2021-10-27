@@ -24,7 +24,7 @@ export default function Login() {
             if (client) {
                 if (emailRef.current.value !== "joselopez@gmail.com") {
                     await login(emailRef.current.value, passwordRef.current.value);
-                    history.push('/client-home');
+                    history.push('/football-bets');
                 } else {
                     setError("Failed to sign in");
                 }

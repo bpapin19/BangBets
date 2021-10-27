@@ -1,20 +1,50 @@
 .navbar {
-    display: flex;
     justify-content: center;
     z-index: 10;
     background-color: #ffffff;
 }
 
-.navlink-title {
-    color: rgb(0, 0, 0);
+.navbar-content {
+    padding: 0;
+    margin: 0;
+}
+
+.logo {
+    width: 50px;
+    margin: 0 auto;
+}
+
+.sports-bar {
+    background-color: #364250;
+    padding: 10px;
+    width: 100%;
+}
+
+.sports-bar-active {
+    background-color: #495665;
+}
+
+.navlink-username {
+    color: #364250;
+}
+
+.navlink-username:hover {
+    color: #373a3c;
     text-decoration: none;
-    padding: 0 5px;
+}
+
+.navlink-title {
+    color: rgb(255, 255, 255);
+    padding: 5px 50px;
+    text-align: center;
+    border: 1px solid #364250;
+    border-radius: 10px;
 }
 
 .navlink-title:hover {
-    color: rgb(193, 36, 36);
+    color: rgb(255, 255, 255);
     text-decoration: none;
-    padding: 0 5px;
+    background-color: #495665;
 }
 
 .site-title {
@@ -77,9 +107,15 @@
     filter: invert(21%) sepia(49%) saturate(3375%) hue-rotate(201deg) brightness(93%) contrast(105%);
 }
 
-@media (max-width:800px){
+@media (max-width:1000px){
     .navlink-title {
-        font-size: 13px;
+        font-size: 10px;
+        padding: 5px 10px;
+        margin: 0;
+    }
+
+    .sports-bar {
+        padding: 0;
     }
 
     .site-title {

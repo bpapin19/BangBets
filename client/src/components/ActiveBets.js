@@ -2,7 +2,9 @@ import React, { Component, useState, useEffect } from 'react';
 import {Card} from 'react-bootstrap';
 import { AiOutlineDown } from "react-icons/ai";
 import { AiOutlineUp } from "react-icons/ai";
+import { useAuth } from '../contexts/AuthContext'
 import Collapsible from 'react-collapsible';
+import axios from "axios";
 
 export function ActiveBets(props) {
 
@@ -10,13 +12,21 @@ export function ActiveBets(props) {
     const [disabled, setDisabled] = useState(true);
     const [betAmount, setBetAmount] = useState(0);
     const [winAmount, setWinAmount] = useState(0);
+    const currentUser = useAuth();
 
+    const baseRouteUrl = process.env.REACT_APP_ROUTE_URL;
+
+    const Market_Names = {"h2h": "Moneyline", "spreads": "Spread", "totals": "Total"};
     var singleBet;
     var parlay;
 
     useEffect(() => {
         props.setActiveBets(props.activeBets);
         if (props.activeBets.length !== 0) {
+            // Disable submit button if bet amount is empty
+            if (document.getElementById("risk").value === "") { 
+                setDisabled(true);
+            }
             //Open bet slip on add bet click
             setOpen(true);
         } else {
@@ -85,7 +95,22 @@ export function ActiveBets(props) {
     }
 
     function placeBets() {
-        props.setActiveBets([]);
+        axios({
+            method: 'post',
+            url: baseRouteUrl + "/api/bet",
+            data: {
+              userId: currentUser.uid,
+              user: currentUser.displayName,
+            }
+          })
+          .then(res => {
+            props.setSuccess(res.data.message);
+            props.setActiveBets([]);
+          })
+          .catch(function() {
+            props.setError("Unable to add your bet");
+          });
+          
     }
 
     return (
@@ -105,17 +130,20 @@ export function ActiveBets(props) {
                         return(
                             <div className="active-bet-container">
                                 <div className="active-bet">
-                                    {bet["market"].key}
-                                </div>
-                                <div className="active-bet">
                                     {bet["outcome"].name}
+                                    {bet["market"].key === "spreads" && <span> {bet["outcome"].point > 0 && <span>+</span>}{bet["outcome"].point}</span>}
+                                    {bet["market"].key === "totals" && <span> {bet["outcome"].point}</span>}
+                                    <span className="active-price">{bet["outcome"].price > 0 && <span>+</span>}{bet["outcome"].price}</span>
                                 </div>
-                                <div className="game">{bet["away_team"]} @ {bet["home_team"]}</div>
                                 <span>
                                     <button className="remove-bet-button" onClick={() => {props.deleteBet(bet); clearFields()}}>
                                         X
                                     </button>
                                 </span>
+                                <div className="active-bet">
+                                    {Market_Names[bet["market"].key]}
+                                </div>
+                                <div className="game">{bet["away_team"]} @ {bet["home_team"]}</div>
                             </div>
                         )
                     })}
@@ -124,11 +152,11 @@ export function ActiveBets(props) {
                 <div className="bet-amount">
                     <div className="row">
                         <div className="col">
-                            <input type="number" id="risk" className="inputText" onKeyUp={() => riskKeyUp()} required/>
+                            <input type="number" min="1" id="risk" className="inputText" onKeyUp={() => riskKeyUp()} required/>
                             <span className="floating-label">Risk</span>
                         </div>
                         <div className="col">
-                            <input type="number" id="win" className="inputText" required/>
+                            <input type="number" id="win" className="inputText" disabled/>
                             <span className="floating-label">Win</span>
                         </div>
                     </div>

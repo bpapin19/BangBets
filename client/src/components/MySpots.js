@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext';
 import moment from 'moment';
 import "./MySpots.css";
 import { BsTrash } from 'react-icons/bs';
-import spotUploadImage from '../spot-upload.png';
 
 export default function MySpots() {
 
@@ -14,7 +13,7 @@ export default function MySpots() {
     const { currentUser } = useAuth();
     const [resSuccess, setResSuccess] = useState("");
 
-    var baseUrl = "https://skate-spot-tracker.herokuapp.com";
+    var baseUrl = process.env.REACT_APP_ROUTE_URL;
 
     function deleteSpot(spotToDelete){
         axios({
@@ -68,7 +67,7 @@ export default function MySpots() {
                 <div style={{paddingTop: "30px"}}className="container">
                    <div className="card">
                         <div className="card-header">
-                           <img className="no-spots-img" src={spotUploadImage} alt=""/>
+                           <img className="no-spots-img" alt=""/>
                         </div>
                         <div className="no-spots-card-body">
                             You haven't uploaded any spots.

@@ -4,6 +4,7 @@ body {
 
 .bet-container {
     margin-left: 20px;
+    margin-right: 20px;
     text-align: left;
 }
 
@@ -11,7 +12,7 @@ body {
     border: 2px solid rgb(240, 240, 240);
     margin: 5px;
     background-color: white;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .col {
@@ -27,15 +28,17 @@ body {
 .col-container-teams {
     padding-left: 10px;
     text-align: left;
-    min-width: 200px;
+    min-width: 135px;
 }
 
 .teams-title-container {
-    min-width: 160px;
+    min-width: 135px;
 }
 
 .title-container {
     min-width: 10px;
+    font-size: 19px;
+    margin: 0;
 }
 
 .box {
@@ -44,6 +47,16 @@ body {
     border: none;
     background-color: transparent;
     width: 100%;
+    font-size: 18px;
+}
+
+.box-teams {
+    padding-top: 5px;
+    font-size: 18px;
+}
+
+.gray {
+    color: rgb(106, 106, 106);
 }
 
 .box:hover {
@@ -57,10 +70,37 @@ body {
 .title-container {
     margin-left: 20px;
     text-align: center;
+    font-size: 15px;
 }
 
 hr {
     margin: 0;
+}
+
+.success {
+    position: fixed;
+    text-align: center;
+    z-index: 20;
+    top: 0;
+    width: 100%;
+}
+
+.success:target {
+    height: 125px;
+  }
+
+.error {
+    position: fixed;
+    text-align: center;
+    z-index: 20;
+    top: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.error:target {
+    height: 125px;
 }
 
 /* ==============================  ACTIVE BETS  =================================== */
@@ -83,7 +123,7 @@ hr {
 }
 
 .bet-slip-container {
-    position:absolute;
+    position:fixed;
     bottom:0;
     right:0;
     z-index: 1;
@@ -105,13 +145,19 @@ hr {
 
 .active-bet {
     width: 100%;
-    border: 1px solid rgb(242, 242, 242);
     padding-left: 10px;
     font-size: 16px;
 }
 
+.active-price {
+    float: right;
+    padding-right: 30px;
+    color: green;
+}
+
 .game {
     font-size: 14px;
+    padding-left: 10px;
 }
 
 .bet-amount {
@@ -197,4 +243,22 @@ input[type=number] {
     border: none;
     background-color: transparent;
     float: right;
+}
+
+@media (max-width:800px){
+    .moneyline {
+        max-width: 50px;
+    }
+
+    .spread {
+        max-width: 75px;
+    }
+
+    .box {
+        font-size: 12px;
+    }
+
+    .box-teams {
+        font-size: 12px;
+    }
 }

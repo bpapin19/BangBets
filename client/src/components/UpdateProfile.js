@@ -14,7 +14,7 @@ export default function UpdateProfile() {
     const history = useHistory();
     const photoRef = useRef();
 
-    var baseUrl = "https://skate-spot-tracker.herokuapp.com";
+    var baseUrl = process.env.REACT_APP_ROUTE_URL;
 
     useEffect(() => {
         if (file !== null){
