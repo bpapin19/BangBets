@@ -53,6 +53,10 @@
     font-size: 25px;
 }
 
+.site-title:hover {
+    color: rgb(193, 36, 36);
+}
+
 .login-button, .join-button {
     display: inline-block;
     width: 60px;
@@ -103,10 +107,6 @@
     padding-left: 10px;
 }
 
-.site-title:hover .logo{
-    filter: invert(21%) sepia(49%) saturate(3375%) hue-rotate(201deg) brightness(93%) contrast(105%);
-}
-
 @media (max-width:1000px){
     .navlink-title {
         font-size: 10px;
@@ -123,7 +123,7 @@
     }
 
     .username {
-        display: none;
+        font-size: 14px;
     }
 
     .sign-in {

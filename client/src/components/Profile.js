@@ -75,6 +75,7 @@ export default function Profile(props) {
                                 <strong>Email: </strong> 
                                 <span>{currentUser.email}</span>
                             </div>
+                            <Link to='/my-bets' className="btn btn-primary w-100 mb-2">My Bets</Link>
                             <Link to='/update-profile' className="btn btn-primary w-100">Update Profile</Link>
                         </Form>
                     </Card.Body>

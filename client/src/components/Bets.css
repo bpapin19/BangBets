@@ -15,6 +15,13 @@ body {
     font-size: 16px;
 }
 
+.row-container-titles {
+    border: 2px solid rgb(240, 240, 240);
+    margin: 5px;
+    background-color: transparent;
+    font-size: 16px;
+}
+
 .col {
 
 }
@@ -22,23 +29,24 @@ body {
 .col-container {
     border-left: 2px solid rgb(240, 240, 240);
     padding: 0;
+}
+
+.teams {
+    text-align: left;
+    padding-left: 10px;
+    min-width: 130px;
+}
+
+.moneyline {
     text-align: center;
 }
 
-.col-container-teams {
-    padding-left: 10px;
-    text-align: left;
-    min-width: 135px;
+.spread {
+    text-align: center;
 }
 
-.teams-title-container {
-    min-width: 135px;
-}
-
-.title-container {
-    min-width: 10px;
-    font-size: 19px;
-    margin: 0;
+.total {
+    text-align: center;
 }
 
 .box {
@@ -51,7 +59,6 @@ body {
 }
 
 .box-teams {
-    padding-top: 5px;
     font-size: 18px;
 }
 
@@ -85,10 +92,6 @@ hr {
     width: 100%;
 }
 
-.success:target {
-    height: 125px;
-  }
-
 .error {
     position: fixed;
     text-align: center;
@@ -97,10 +100,6 @@ hr {
     width: 100%;
     padding: 0;
     margin: 0;
-}
-
-.error:target {
-    height: 125px;
 }
 
 /* ==============================  ACTIVE BETS  =================================== */
@@ -260,5 +259,9 @@ input[type=number] {
 
     .box-teams {
         font-size: 12px;
+    }
+
+    .teams-padding {
+        padding-top: 6px;
     }
 }

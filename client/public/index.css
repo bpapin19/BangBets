@@ -2,6 +2,12 @@
     padding:40px 0;
     background-color:#ffffff;
     color:#4b4c4d;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+    margin-top: auto;
+    width: 100%
   }
   
   .footer-basic ul {
@@ -61,7 +67,14 @@
   .body { 
     font-family: "Barlow Semi Condensed";
     font-size: 18px;
-  ;}
+    height: 100%;
+  }
+
+.body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
   @media (max-width: 1000px) {
     .footer-basic ul {

@@ -101,7 +101,7 @@ export default function Login() {
                 <div style={borderStyles}>
                     <div className="top-buttons">
                         <button onClick={() => handleClient()} id="client-button" className="client-button">Client</button>
-                        <button onClick={() => handleBookie()} id="bookie-button" className="bookie-button">Bookie</button>
+                        <button onClick={() => handleBookie()} id="bookie-button" className="bookie-button">Admin</button>
                     </div>
                     <hr className="divider"/>
                     <Card.Body>

@@ -28,8 +28,17 @@ import ActiveBets from './ActiveBets';
           });
     }, []);
 
+    function containsObject(obj, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].id === obj.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function addBet(bet) {
-        if (!activeBets.includes(bet)) {
+        if (!containsObject(bet, activeBets)) {
             activeBetsArray = activeBets.concat(bet);
             setActiveBets(activeBetsArray);
         }
@@ -45,10 +54,14 @@ import ActiveBets from './ActiveBets';
     function getSportsBook(booksArray) {
         // Looking for barstool
         for (var i=0; i < booksArray.length; i++) {
-            if (booksArray[i].key === "barstool") {
+            if (booksArray[i].key === "barstool" || "fanduel") {
                 return booksArray[i];
             }
         }
+    }
+
+    function generateUniqueID(game_id, market) {
+        return "" + game_id + "_" + market;
     }
 
     return (
@@ -57,46 +70,68 @@ import ActiveBets from './ActiveBets';
             {error !=="" && <Alert variant="danger" className="error">{error}</Alert>}
             <div className="row title-container">
                 <div className="col col-container-teams">
-                    <div className="box-teams">Game</div>
+                    <div className="">Game</div>
                 </div>
                 <div className="col col-container moneyline">
-                    <div className="box">Win</div>
-                </div>
-                <div className="col title-container">
-                    <div className="box">Spread</div>
+                    <div className="">Win</div>
                 </div>
                 <div className="col col-container">
-                    <div className="box">Totals</div>
+                    <div className="">Spread</div>
+                </div>
+                <div className="col col-container">
+                    <div className="">Totals</div>
                 </div>
             </div>
             {console.log(basketballBets)}
-            {basketballBets.map(bet => {
+            {basketballBets.map(game => {
+                var moneyline = "";
+                var spread = "";
+                var total = "";
+                var sportsBook = getSportsBook(game.bookmakers);
+
+                // Sometimes bet outcomes are not avaliable, make sure bets are still correct
+                for (var betIndex=0; betIndex < sportsBook.markets.length; betIndex++) {
+                    switch (sportsBook.markets[betIndex].key) {
+                        case "h2h":
+                            moneyline = sportsBook.markets[betIndex];
+                            break;
+                        case "spreads":
+                            spread = sportsBook.markets[betIndex];
+                            break;
+                        case "totals":
+                            total = sportsBook.markets[betIndex];
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 return(
-                    <div className="row row-container">
-                        <div className="col col-container-teams">
-                            {getSportsBook(bet.bookmakers).markets[0] && <div className="box-teams">{getSportsBook(bet.bookmakers).markets[0].outcomes[0].name}</div>}
+                    <div key={game.id} className="row row-container">
+                        <div className="col col-container teams">
+                            {moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>}
                             <hr/>
-                            {getSportsBook(bet.bookmakers).markets[0] && <div className="box-teams">{getSportsBook(bet.bookmakers).markets[0].outcomes[1].name}</div>}
+                            {moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>}
                         </div>
                         <div className="col col-container moneyline">
-                            {getSportsBook(bet.bookmakers).markets[0] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[0], "outcome":getSportsBook(bet.bookmakers).markets[0].outcomes[0]})}>{getSportsBook(bet.bookmakers).markets[0].outcomes[0].price > 0 && <span>+</span>}{getSportsBook(bet.bookmakers).markets[0].outcomes[0].price}</button>}
+                            {moneyline && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[0].price > 0 && <span>+</span>}{moneyline.outcomes[0].price}</button>}
                             <hr/>
-                            {getSportsBook(bet.bookmakers).markets[0] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[0], "outcome":getSportsBook(bet.bookmakers).markets[0].outcomes[1]})}>{getSportsBook(bet.bookmakers).markets[0].outcomes[1].price > 0 && <span>+</span>}{getSportsBook(bet.bookmakers).markets[0].outcomes[1].price}</button>}
+                            {moneyline && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[1].price > 0 && <span>+</span>}{moneyline.outcomes[1].price}</button>}
+                        </div>
+                        <div className="col col-container spread">
+                            {spread && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[0].point > 0 && <span>+</span>}{spread.outcomes[0].point}</span> ({spread.outcomes[0].price})</button>}
+                            <hr/>
+                            {spread && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[1].point > 0 && <span>+</span>}{spread.outcomes[1].point}</span> ({spread.outcomes[1].price})</button>}
                         </div>
                         <div className="col col-container">
-                            {getSportsBook(bet.bookmakers).markets[1] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[1], "outcome":getSportsBook(bet.bookmakers).markets[1].outcomes[0]})}><span className="gray">{getSportsBook(bet.bookmakers).markets[1].outcomes[0].point > 0 && <span>+</span>}{getSportsBook(bet.bookmakers).markets[1].outcomes[0].point}</span> ({getSportsBook(bet.bookmakers).markets[1].outcomes[0].price})</button>}
+                            {total && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">O{total.outcomes[0].point}</span> ({total.outcomes[0].price})</button>}
                             <hr/>
-                            {getSportsBook(bet.bookmakers).markets[1] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[1], "outcome":getSportsBook(bet.bookmakers).markets[1].outcomes[1]})}><span className="gray">{getSportsBook(bet.bookmakers).markets[1].outcomes[1].point > 0 && <span>+</span>}{getSportsBook(bet.bookmakers).markets[1].outcomes[1].point}</span> ({getSportsBook(bet.bookmakers).markets[1].outcomes[1].price})</button>}
-                        </div>
-                        <div className="col col-container">
-                            {getSportsBook(bet.bookmakers).markets[2] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[2], "outcome":getSportsBook(bet.bookmakers).markets[2].outcomes[0]})}><span className="gray">O{getSportsBook(bet.bookmakers).markets[2].outcomes[0].point}</span> ({getSportsBook(bet.bookmakers).markets[2].outcomes[0].price})</button>}
-                            <hr/>
-                            {getSportsBook(bet.bookmakers).markets[2] && <button className="box" onClick={() => addBet({"home_team": bet.home_team, "away_team": bet.away_team, "market":getSportsBook(bet.bookmakers).markets[2], "outcome":getSportsBook(bet.bookmakers).markets[2].outcomes[1]})}><span className="gray">U{getSportsBook(bet.bookmakers).markets[2].outcomes[1].point}</span> ({getSportsBook(bet.bookmakers).markets[2].outcomes[1].price})</button>}
+                            {total && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">U{total.outcomes[1].point}</span> ({total.outcomes[1].price})</button>}
                         </div>
                     </div>
                 )
             })}
-             <ActiveBets deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess}/>
+             <ActiveBets deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
             </div>
     )
 }

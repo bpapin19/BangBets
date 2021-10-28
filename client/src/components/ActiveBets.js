@@ -17,6 +17,7 @@ export function ActiveBets(props) {
     const baseRouteUrl = process.env.REACT_APP_ROUTE_URL;
 
     const Market_Names = {"h2h": "Moneyline", "spreads": "Spread", "totals": "Total"};
+
     var singleBet;
     var parlay;
 
@@ -46,11 +47,11 @@ export function ActiveBets(props) {
     }
 
     function multiply(array) {
-        var sum = 1;
+        var prod = 1;
         for (var i = 0; i < array.length; i++) {
-            sum = sum * array[i];
+            prod = prod * array[i];
         }
-        return sum;
+        return prod;
     }
 
     function calculatePrices(betAmount) {
@@ -70,7 +71,7 @@ export function ActiveBets(props) {
                     decimalOdds.push((parlayBet.outcome.price/100) + 1);
                 }
             });
-            parlay = parseFloat(betAmount * multiply(decimalOdds)).toFixed(2);
+            parlay = parseFloat((betAmount * multiply(decimalOdds)) - betAmount).toFixed(2);
             setWinAmount(parlay);
         }
     }
@@ -94,18 +95,21 @@ export function ActiveBets(props) {
         setWinAmount(0);
     }
 
-    function placeBets() {
+    function placeBets(activeBets) {
         axios({
             method: 'post',
             url: baseRouteUrl + "/api/bet",
             data: {
-              userId: currentUser.uid,
-              user: currentUser.displayName,
+              userId: currentUser.currentUser.uid,
+              userEmail: currentUser.email,
+              betAmount: betAmount,
+              winAmount: winAmount,
+              game: activeBets
             }
           })
           .then(res => {
-            props.setSuccess(res.data.message);
             props.setActiveBets([]);
+            props.setSuccess(res.data.message);
           })
           .catch(function() {
             props.setError("Unable to add your bet");
@@ -128,7 +132,7 @@ export function ActiveBets(props) {
                 <div className="active-bets-list">
                     {props.activeBets.map(bet => {
                         return(
-                            <div className="active-bet-container">
+                            <div key={bet.id} className="active-bet-container">
                                 <div className="active-bet">
                                     {bet["outcome"].name}
                                     {bet["market"].key === "spreads" && <span> {bet["outcome"].point > 0 && <span>+</span>}{bet["outcome"].point}</span>}
@@ -143,7 +147,7 @@ export function ActiveBets(props) {
                                 <div className="active-bet">
                                     {Market_Names[bet["market"].key]}
                                 </div>
-                                <div className="game">{bet["away_team"]} @ {bet["home_team"]}</div>
+                                <div className="game">{bet.sport} - {bet["away_team"]} @ {bet["home_team"]}</div>
                             </div>
                         )
                     })}
@@ -168,7 +172,7 @@ export function ActiveBets(props) {
                     <div>Possible Winnings: <span className="bet-num">${winAmount}</span></div>
                 </div>
                 <div className="place-bets-button-container">
-                    {props.activeBets.length !== 0 && open && <button id="place-bets-button" onClick={() => placeBets()} className="place-bets-button" disabled={disabled}>Place Bets</button>}
+                    {props.activeBets.length !== 0 && open && <button id="place-bets-button" onClick={() => placeBets(props.activeBets)} className="place-bets-button" disabled={disabled}>Place Bets</button>}
                 </div>
             </Collapsible>
         </Card>

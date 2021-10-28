@@ -5,11 +5,12 @@ const FileCtrl = require('../controllers/file-ctrl');
 
 const router = express.Router();
 
-router.post('/bet', BetCtrl.createBet());
-router.delete('/bet/:id', BetCtrl.deleteBet());
-router.get('/bet/:id', BetCtrl.getBetById());
-router.get('/bets', BetCtrl.getBets());
+router.post('/bet', BetCtrl.createBet);
+router.delete('/bet/:id', BetCtrl.deleteBet);
+router.get('/bet/:id', BetCtrl.getBetById);
+router.get('/bets', BetCtrl.getBets);
+router.get('/bets/:id', BetCtrl.getBetsByUserId);
 
-router.post('/files', FileCtrl.uploadFile());
+router.post('/files', FileCtrl.uploadFile);
 
 module.exports = router;

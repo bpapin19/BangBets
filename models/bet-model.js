@@ -1,17 +1,13 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const betSchema = new Schema(
     {
         userId: { type: String },
-        user_email: { type: String },
-        name: { type: String },
-        location: { type: String },
-        lat: { type: Number },
-        lng: { type: Number },
-        desc: { type: String },
-        type: { type: String },
-        
+        userEmail: { type: String },
+        game: { type: Array },
+        betAmount: { type: Number },
+        winAmount: { type: Number }
     },
     { timestamps: true }
 );

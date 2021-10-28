@@ -54,8 +54,8 @@ export function AuthProvider({children}) {
             setCurrentUser(user);
             setLoading(false);
         });
-        return unsubscribe
-    }, [])
+        return unsubscribe;
+    }, []);
 
     const value = {
         currentUser,
@@ -68,6 +68,7 @@ export function AuthProvider({children}) {
         updatePassword,
         updateUsername
     }
+    
     return (
         <AuthContext.Provider value={value}>
             {!loading && children}

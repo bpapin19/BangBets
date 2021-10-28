@@ -5,7 +5,6 @@ import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios';
 
 export default function UpdateProfile() {
-    const usernameRef = useRef();
     const emailRef = useRef();
     const { currentUser, updateEmail, updateUsername } = useAuth();
     const [error, setError] = useState("");
@@ -56,10 +55,6 @@ export default function UpdateProfile() {
                 promises.push(updateEmail(emailRef.current.value));
             }
 
-            if (usernameRef.current.value !== currentUser.displayName) {
-                promises.push(updateUsername(usernameRef.current.value));
-            }
-
             Promise.all(promises).then(() => {
                 if (file !== null){
                     history.push({pathname: '/profile', state: {from: 'fromUpdate', fileSize: file.size}});
@@ -96,10 +91,6 @@ export default function UpdateProfile() {
                         <h2 className="text-center mb-4">Update Profile</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
                         <Form style={{width: "360px"}} onSubmit={handleSubmit}>
-                            <Form.Group id="username">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control type="username" ref={usernameRef} defaultValue={currentUser.displayName} placeholder={currentUser.displayName}/>
-                            </Form.Group>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" ref={emailRef} defaultValue={currentUser.email}/>

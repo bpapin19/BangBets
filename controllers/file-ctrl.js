@@ -5,7 +5,7 @@ const fs = require("fs");
 require('dotenv').config();
 const aws = require("aws-sdk");
 const multerS3 = require("multer-s3-transform");
-const sharp = require("sharp");
+// const sharp = require("sharp");
 
 const s3Config = new aws.S3({
     accessKeyId: process.env.S3_ACCESS_KEY,
@@ -31,22 +31,22 @@ const s3storage = multerS3({
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });  
     },
-    shouldTransform: true,
-    transforms: [{
-    // change file name to user id or curent date in ISO format
-    key: function(req, file, cb) {
-        if (req.rawHeaders.indexOf('update-profile') > 0) {
-            cb(null, "" + req.get('current-user-id') + ".jpg");
-        } else {
-            var date = new Date();
-            cb(null, "" + date.toISOString().split('.')[0]+"Z" + path.extname(file.originalname));
-        }
-    },
-    transform: function (req, file, cb) {
-        //Perform desired transformations
-        cb(null, sharp().resize(600, 600));
-      }
-    }]
+    // shouldTransform: true,
+    // transforms: [{
+    // // change file name to user id or curent date in ISO format
+    // key: function(req, file, cb) {
+    //     if (req.rawHeaders.indexOf('update-profile') > 0) {
+    //         cb(null, "" + req.get('current-user-id') + ".jpg");
+    //     } else {
+    //         var date = new Date();
+    //         cb(null, "" + date.toISOString().split('.')[0]+"Z" + path.extname(file.originalname));
+    //     }
+    // },
+    // transform: function (req, file, cb) {
+    //     //Perform desired transformations
+    //     cb(null, sharp().resize(600, 600));
+    //   }
+    // }]
 });
 
 const upload = multer({

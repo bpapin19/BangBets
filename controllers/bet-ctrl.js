@@ -4,6 +4,8 @@ createBet = (req, res) => {
 
     const body = req.body;
 
+    console.log(body);
+
     if (!body) {
         return res.status(400).json({
             success: false,
@@ -79,10 +81,25 @@ getBets = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+getBetsByUserId = async (req, res) => {
+    await Bet.find({userId: req.params.id}, (err, bets) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!bets.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: `Bet not found` })
+        }
+        return res.status(200).json({ success: true, data: bets })
+    }).catch(err => console.log(err))
+}
+
+
 module.exports = {
     createBet,
-    updateBet,
     deleteBet,
     getBets,
     getBetById,
+    getBetsByUserId
 }

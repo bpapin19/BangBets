@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@spots.it5t3.mongodb.net/SpotTracker?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@bets.gsi0q.mongodb.net/BangBets?retryWrites=true&w=majority`;
 
 mongoose
     .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })

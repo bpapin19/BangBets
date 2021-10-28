@@ -7,37 +7,11 @@ import { MdOutlineSportsFootball } from 'react-icons/md';
 import { BiBasketball } from 'react-icons/bi';
 import { IoBaseballOutline } from 'react-icons/io5';
 import { MdSportsHockey } from 'react-icons/md';
-import { GiMailedFist } from 'react-icons/gi';
+import { GiAmericanFootballHelmet } from 'react-icons/gi';
 
-export default function NavBar(props) {
+export default function NavBar() {
 
   const {currentUser} = useAuth();
-  const [currentUserName, setCurrentUserName] = useState("");
-  const [img2, setImg2] = useState({});
-
-  useEffect(() => {
-    if (currentUser !== null) {
-      setTimeout(() => {
-        setCurrentUserName(currentUser.displayName);
-      }, 500);
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (currentUser !== null) {
-      setImageLink();
-    }
-    return () => {
-        setImg2({});
-    };
-}, [props]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const setImageLink = () => {
-    // Easiest solution to wait for AWS to complete upload
-    setTimeout(() => {
-      setImg2({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()});
-    }, 1000);
-  }
 
   return (
     <header className="navbar">
@@ -70,7 +44,6 @@ export default function NavBar(props) {
             activeClassName="text-blue-100 bg-blue-700"
             className="navlink-username"
           >
-            <img className="pfp" src={img2.url + '?' + img2.hash} alt="" onError={(event) => event.target.src = 'https://i.ibb.co/zHrQvyf/default.jpg'}/>
             <span className="username">{currentUser.email.substring(0, currentUser.email.indexOf('@'))}</span>
           </NavLink>
         }
@@ -115,8 +88,8 @@ export default function NavBar(props) {
               activeClassName="sports-bar-active"
               className="navlink-title"
             >
-              <GiMailedFist className="nav-icon" size={30}/>
-              <div>MMA</div>
+              <GiAmericanFootballHelmet className="nav-icon" size={30}/>
+              <div>CFB</div>
             </NavLink>
       </div>}
     </div>
