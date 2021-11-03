@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -15,7 +14,6 @@ import ActiveBets from './BetSlip';
     const [error, setError] = useState("");
     const [transition, setTransition] = useState(false);
     const {setClientAuth} = useAuth();
-    // const {addBetToGlobal} = useBetContext();
 
     var activeBetsArray = [];
 
