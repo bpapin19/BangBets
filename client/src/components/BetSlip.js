@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Collapsible from 'react-collapsible';
 import axios from "axios";
 
-export function ActiveBets(props) {
+export function BetSlip(props) {
 
     const [open, setOpen] = useState(false);
     const [disabled, setDisabled] = useState(true);
@@ -101,7 +101,7 @@ export function ActiveBets(props) {
             url: baseRouteUrl + "/api/bet",
             data: {
               userId: currentUser.currentUser.uid,
-              userEmail: currentUser.email,
+              userEmail: currentUser.currentUser.email,
               betAmount: betAmount,
               winAmount: winAmount,
               game: activeBets
@@ -180,4 +180,4 @@ export function ActiveBets(props) {
    
 };
 
-export default ActiveBets;
+export default BetSlip;

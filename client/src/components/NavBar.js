@@ -29,7 +29,7 @@ export default function NavBar() {
             </div>}
             {currentUser && currentUser.displayName === "bookie" && <div>
                 <NavLink
-                    to="/bookie-home"
+                    to="/bookie-active-bets"
                     exact
                     activeClassName="text-black"
                     className="site-title"
@@ -90,6 +90,30 @@ export default function NavBar() {
             >
               <GiAmericanFootballHelmet className="nav-icon" size={30}/>
               <div>CFB</div>
+            </NavLink>
+      </div>}
+      {currentUser && currentUser.displayName === "bookie" &&
+      <div className="container flex sports-bar">
+            <NavLink
+              to="bookie-active-bets"
+              activeClassName="sports-bar-active"
+              className="navlink-title"
+            >
+              Active
+            </NavLink>
+            <NavLink
+              to="bookie-week-bets"
+              activeClassName="sports-bar-active"
+              className="navlink-title"
+            >
+              This Week
+            </NavLink>
+            <NavLink
+              to="bookie-all-bets"
+              activeClassName="sports-bar-active"
+              className="navlink-title"
+            >
+              All
             </NavLink>
       </div>}
     </div>

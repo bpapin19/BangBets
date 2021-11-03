@@ -7,7 +7,9 @@ const betSchema = new Schema(
         userEmail: { type: String },
         game: { type: Array },
         betAmount: { type: Number },
-        winAmount: { type: Number }
+        winAmount: { type: Number },
+        status: { type: Boolean, default: false },
+        result: { type: String, default: "in progress" }
     },
     { timestamps: true }
 );

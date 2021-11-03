@@ -9,6 +9,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^4.6.0",
+    "classnames": "^2.3.1",
     "firebase": "^8.3.2",
     "google-map-react": "^2.1.9",
     "moment": "^2.29.1",

@@ -8,18 +8,20 @@ export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const { login } = useAuth();
+    const { setClientAuth } = useAuth();
+    const { setBookieAuth } = useAuth();
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
     const [client, setClient] = useState(false);
     const [bookie, setBookie] = useState(false);
-    const [userType, setUserType] = useState("client");
     const history = useHistory();
+    const {currentUser} = useAuth();
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         try {
-            setError("")
+            setError("");
             setLoading(true);
             if (client) {
                 if (emailRef.current.value !== "joselopez@gmail.com") {
@@ -30,8 +32,10 @@ export default function Login() {
                 }
             } else if (bookie) {
                 if (emailRef.current.value === "newertest@gmail.com") {
+                    console.log(currentUser)
                     await login(emailRef.current.value, passwordRef.current.value);
-                    history.push('/bookie-home');
+                    history.push('/bookie-active-bets');
+                    console.log(currentUser)
                 } else {
                     setError("Failed to sign in");
                 }
@@ -39,6 +43,7 @@ export default function Login() {
         } catch {
             setError("Failed to sign in");
         }
+        
         setLoading(false);
     }
 
@@ -60,7 +65,7 @@ export default function Login() {
     function handleClient() {
         setClient(true);
         setBookie(false);
-        setUserType("client");
+
         clientButton.classList.add("client-selected");
         submitButton.classList.add("client-submit");
         if (bookieButton.classList.contains("bookie-selected")) {
@@ -74,7 +79,6 @@ export default function Login() {
     function handleBookie() {
         setBookie(true);
         setClient(false);
-        setUserType("bookie");
         bookieButton.classList.add("bookie-selected");
         submitButton.classList.add("bookie-submit");
         if (clientButton.classList.contains("client-selected")) {
@@ -107,7 +111,7 @@ export default function Login() {
                     <Card.Body>
                         <h2 className="text-center mb-4">Login</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
-                        <Form style={{width: "360px"}} onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmit}>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" ref={emailRef} required />

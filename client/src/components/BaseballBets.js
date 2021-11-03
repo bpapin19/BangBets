@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 import './Bets.css';
-import ActiveBets from './ActiveBets';
+import BetSlip from './BetSlip';
 
 
   export default function BaseballBets() {
@@ -130,7 +130,7 @@ import ActiveBets from './ActiveBets';
                     </div>
                 )
             })}
-             <ActiveBets deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
+             <BetSlip deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
             </div>
     )
 }

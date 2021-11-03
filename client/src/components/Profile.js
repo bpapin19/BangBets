@@ -3,7 +3,7 @@ import { Card, Button, Alert, Container, Form } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useHistory } from "react-router-dom";
 
-export default function Profile(props) {
+export default function Profile() {
     const  [error, setError] = useState("");
     const { currentUser, logout } = useAuth();
     const history  = useHistory();
@@ -58,7 +58,7 @@ export default function Profile(props) {
             <div className="w-100" style={{maxWidth: "400px"}}>
                 <div style={ borderStyles }>
                     <Card.Body>
-                        <Form style={{width: "360px"}}>
+                        <Form>
                             <h2 className="text-center mb-4">Profile</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {!loading &&
@@ -75,7 +75,7 @@ export default function Profile(props) {
                                 <strong>Email: </strong> 
                                 <span>{currentUser.email}</span>
                             </div>
-                            <Link to='/my-bets' className="btn btn-primary w-100 mb-2">My Bets</Link>
+                            {currentUser.displayName === 'client' && <Link to='/my-bets' className="btn btn-primary w-100 mb-2">My Bets</Link>}
                             <Link to='/update-profile' className="btn btn-primary w-100">Update Profile</Link>
                         </Form>
                     </Card.Body>

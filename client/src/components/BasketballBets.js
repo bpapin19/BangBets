@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 
 import './Bets.css';
-import ActiveBets from './ActiveBets';
+import BetSlip from './BetSlip';
 
 
   export default function BasketballBets() {
@@ -68,17 +68,17 @@ import ActiveBets from './ActiveBets';
         <div className="bet-container">
             {success !== "" && <Alert variant="success" className="success">{success}</Alert>}
             {error !=="" && <Alert variant="danger" className="error">{error}</Alert>}
-            <div className="row title-container">
-                <div className="col col-container-teams">
+            <div className="row row-container-titles">
+                <div className="col col-container teams">
                     <div className="">Game</div>
                 </div>
                 <div className="col col-container moneyline">
                     <div className="">Win</div>
                 </div>
-                <div className="col col-container">
+                <div className="col col-container spread">
                     <div className="">Spread</div>
                 </div>
-                <div className="col col-container">
+                <div className="col col-container total">
                     <div className="">Totals</div>
                 </div>
             </div>
@@ -108,10 +108,13 @@ import ActiveBets from './ActiveBets';
 
                 return(
                     <div key={game.id} className="row row-container">
-                        <div className="col col-container teams">
-                            {moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>}
+                        <div className="col col-container teams teams-padding">
+                            {/* Deal with bad data from API - some bets are not avaliable */}
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[0].name}</div>)}
                             <hr/>
-                            {moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>}
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[1].name}</div>)}
                         </div>
                         <div className="col col-container moneyline">
                             {moneyline && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[0].price > 0 && <span>+</span>}{moneyline.outcomes[0].price}</button>}
@@ -131,7 +134,7 @@ import ActiveBets from './ActiveBets';
                     </div>
                 )
             })}
-             <ActiveBets deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
+             <BetSlip deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
             </div>
     )
 }

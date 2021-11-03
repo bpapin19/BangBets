@@ -1,9 +1,10 @@
 import { React, useState, useEffect } from 'react';
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 
 import './Bets.css';
-import ActiveBets from './ActiveBets';
+import ActiveBets from './BetSlip';
 
 
   export default function FootballBets() {
@@ -12,12 +13,16 @@ import ActiveBets from './ActiveBets';
     const [activeBets, setActiveBets] = useState([]);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
+    const [transition, setTransition] = useState(false);
+    const {setClientAuth} = useAuth();
+    // const {addBetToGlobal} = useBetContext();
 
     var activeBetsArray = [];
 
     var baseOddsUrl = process.env.REACT_APP_ODDS_URL;
 
     useEffect(() => {
+        setClientAuth();
         axios({
             method: 'get',
             url: baseOddsUrl + `/v4/sports/americanfootball_nfl/odds/?apiKey=${process.env.REACT_APP_ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`,
@@ -27,6 +32,26 @@ import ActiveBets from './ActiveBets';
             setFootballBets(res.data);
           });
     }, []);
+
+    useEffect(() => {
+        if (success !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setSuccess("");
+            }, 3000);
+        }
+    }, [success]);
+
+    useEffect(() => {
+        if (error !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setError("");
+            }, 3000);
+        }
+    }, [error]);
 
     function containsObject(obj, list) {
         for (var i = 0; i < list.length; i++) {
@@ -66,8 +91,8 @@ import ActiveBets from './ActiveBets';
 
     return (
         <div className="bet-container">
-            {success !== "" && <Alert variant="success" className="success">{success}</Alert>}
-            {error !=="" && <Alert variant="danger" className="error">{error}</Alert>}
+            <div variant="success" className = {`success ${transition ? 'show' : 'hide'}`}>{success}</div>
+            <div variant="danger" className = {`error ${transition ? 'show' : 'hide'}`}>{error}</div>
             <div className="row row-container-titles">
                 <div className="col col-container teams">
                     <div className="">Game</div>

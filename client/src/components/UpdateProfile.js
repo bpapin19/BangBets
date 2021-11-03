@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function UpdateProfile() {
     const emailRef = useRef();
-    const { currentUser, updateEmail, updateUsername } = useAuth();
+    const { currentUser } = useAuth();
     const [error, setError] = useState("");
     const [file, setFile] = useState( null );
     const [loading, setLoading] = useState(false);
@@ -51,10 +51,6 @@ export default function UpdateProfile() {
             setLoading(true);
             setError("");
 
-            if (emailRef.current.value !== currentUser.email) {
-                promises.push(updateEmail(emailRef.current.value));
-            }
-
             Promise.all(promises).then(() => {
                 if (file !== null){
                     history.push({pathname: '/profile', state: {from: 'fromUpdate', fileSize: file.size}});
@@ -90,11 +86,7 @@ export default function UpdateProfile() {
                     <Card.Body>
                         <h2 className="text-center mb-4">Update Profile</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
-                        <Form style={{width: "360px"}} onSubmit={handleSubmit}>
-                            <Form.Group id="email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" ref={emailRef} defaultValue={currentUser.email}/>
-                            </Form.Group>
+                        <Form onSubmit={handleSubmit}>
                             <Form.Group>
                                 <Form.File id="photo" label="Profile Picture" onChange={handleFileUpload} ref={photoRef}/>
                             </Form.Group>

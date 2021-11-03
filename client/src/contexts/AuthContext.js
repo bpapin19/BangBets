@@ -15,13 +15,13 @@ export function AuthProvider({children}) {
         return auth.signInWithEmailAndPassword(email, password);
     }
 
-    function setClient() {
+    function setClientAuth() {
         return currentUser.updateProfile({
             displayName: "client"
         });
     }
 
-    function setBookie() {
+    function setBookieAuth() {
         return currentUser.updateProfile({
             displayName: "bookie"
         });
@@ -60,8 +60,8 @@ export function AuthProvider({children}) {
     const value = {
         currentUser,
         login,
-        setClient,
-        setBookie,
+        setClientAuth,
+        setBookieAuth,
         logout,
         resetPassword,
         updateEmail,

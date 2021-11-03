@@ -4,16 +4,16 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import moment from 'moment';
 import "./MyBets.css";
-import { BsTrash } from 'react-icons/bs';
+import { FaFileInvoiceDollar } from 'react-icons/fa';
 
 export default function MyBets() {
 
     const [betsArray, setBetsArray] = useState([]);
-    const [noBets, setNoBets] = useState(false);
     const { currentUser } = useAuth();
-    const [resSuccess, setResSuccess] = useState("");
+    const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
-    const [disabled, setDisabled] = useState(false);
+    const [deleted, setDeleted] = useState(false);
+    const [transition, setTransition] = useState("");
 
     const Market_Names = {"h2h": "Moneyline", "spreads": "Spread", "totals": "Total"};
     const NFL_Teams = {"Arizona Cardinals":"ARI", "Atlanta Falcons":"ATL", "Baltimore Ravens":"BAL",
@@ -59,13 +59,11 @@ export default function MyBets() {
         var current_time = new Date();
         var soonestCommenceTime = new Date(2040, 0, 1);
         for (var i=0; i < betToCheck.game.length; i++) {
-            console.log("current type: " + typeof( Date.parse(betToCheck.game[i].commence_time)));
             if (Date.parse(betToCheck.game[i].commence_time) < soonestCommenceTime) {
                 soonestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
             }
         }
-        if (current_time > betToCheck) {
-            setDisabled(true);
+        if (current_time > soonestCommenceTime) {
             return true;
         } else {
             return false;
@@ -73,19 +71,22 @@ export default function MyBets() {
     }
 
     function deleteBet(betToDelete){
+        setDeleted(false);
         if (!isGameLive(betToDelete)) {
             axios({
                 method: 'delete',
                 url: `${baseUrl}/api/bet/${betToDelete._id}`,
               })
               .then(res => {
-                  setResSuccess("Bet was successfully cancelled");
-                  var newBetsArray = betsArray.filter(bet => bet._id !== betToDelete._id);
-                  if (newBetsArray.length === 0) { setNoBets(true);}
+                  setSuccess("Bet was successfully cancelled");
+                  setDeleted(true);
+                  var newBetsArray = betsArray.slice();
+                  var index = newBetsArray.indexOf(betToDelete);
+                  newBetsArray.splice(index, 1);
                   setBetsArray(newBetsArray);
               });
         } else {
-            setError("Error - Cannot cancel live bet");
+            setError("Cannot cancel live bet");
         }
     }
 
@@ -113,21 +114,39 @@ export default function MyBets() {
           .then(res => {
             setBetsArray(res.data.data);
           });
-      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      }, [deleted]); // eslint-disable-line react-hooks/exhaustive-deps
+
+      useEffect(() => {
+        if (success !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setSuccess("");
+            }, 2000);
+        }
+    }, [success]);
+
+    useEffect(() => {
+        if (error !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setError("");
+            }, 2000);
+        }
+    }, [error]);
 
     return (
     <div>
-        { resSuccess && 
-            <div style={{textAlign: 'center'}} className="alert alert-success success">{resSuccess}</div> }
-        { error && 
-            <div style={{textAlign: 'center'}} className="alert alert-error error">{error}</div> }
+        <div variant="success" className = {`success ${transition ? 'show' : 'hide'}`}>{success}</div>
+            <div variant="danger" className = {`error ${transition ? 'show' : 'hide'}`}>{error}</div>
         <h1 className="title">My Bets</h1>
         {betsArray.length === 0 &&
             <div>
                 <div style={{paddingTop: "30px"}}className="container">
                    <div className="card">
-                        <div className="card-header">
-                           <img className="no-bets-img" alt=""/>
+                        <div className="card-header no-bets-icon">
+                           <FaFileInvoiceDollar size={150}/>
                         </div>
                         <div className="no-bets-card-body">
                             You haven't placed any bets.
@@ -160,6 +179,7 @@ export default function MyBets() {
                                                     <div className="bet-name">{game.outcome.name}<span className="price">{game.outcome.price > 0 && <span>+</span>}{game.outcome.price}</span></div>
                                                     <div className="market-name">{Market_Names[game.market.key]} <span>{game.market.key === 'spreads' && game.outcome.point > 0 && <span>+</span>}{game.outcome.point}</span></div>
                                                     <div className="game-name">{game.sport} - {getAbbr(game.sport, game.away_team)} @ {getAbbr(game.sport, game.home_team)}</div>
+                                                    <div className="game-name">{moment(game.commence_time).format('MMMM Do YYYY, h:mm a')}</div>
                                                 </div>
                                             );
                                         })}
@@ -169,7 +189,7 @@ export default function MyBets() {
                                             <small>Placed: {moment(bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
                                         </div>
                                         <div className="btn-container">
-                                            <button className="cancel-btn" disabled={disabled} onClick={() => {deleteBet(bet)}}>Cancel Bet</button>
+                                            <button className="cancel-btn" onClick={() => {deleteBet(bet)}}>Cancel Bet</button>
                                         </div>
                                     </div>
                                 </div>
