@@ -1,5 +1,6 @@
 {
-  "name": "skatetracker",
+  "name": "bangbets",
+  "homepage": "./",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,17 +12,12 @@
     "bootstrap": "^4.6.0",
     "classnames": "^2.3.1",
     "firebase": "^8.3.2",
-    "google-map-react": "^2.1.9",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
     "react-collapsible": "^2.8.4",
     "react-dom": "^17.0.2",
-    "react-geocode": "^0.2.3",
-    "react-geolocated": "^3.1.0",
     "react-icons": "^4.3.1",
-    "react-leaflet": "^3.1.0",
-    "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
