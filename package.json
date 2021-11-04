@@ -1,5 +1,6 @@
 {
     "name": "server",
+    "homepage": "https://bang-bets.herokuapp.com",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -8,7 +9,7 @@
         "build": "cd client && npm run build",
         "install-client": "cd client && npm install",
         "heroku-postbuild": "npm run install-client && npm run build",
-        "server": "nodemon server.js"
+        "start": "nodemon server.js"
     },
     "keywords": [],
     "author": "",
