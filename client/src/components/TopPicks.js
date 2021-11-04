@@ -20,7 +20,7 @@ import './Home.css';
     setClientAuth();
       axios({
         method: 'get',
-        url: baseUrl + "/api/bets/week"
+        url: baseUrl + "/api/bets/active"
       })
       .then(res => {
         res.data.data.forEach(
@@ -41,7 +41,7 @@ import './Home.css';
     return (
     <div className="app">
       <h1 className="title">Welcome to Bang Bets</h1>
-      <h2 className="title">Top Picks This Week</h2>
+      <h2 className="title">Top Picks</h2>
       <div className="container">
         {Object.values(TopPicks).map((user_bets, i) => {
           return(
