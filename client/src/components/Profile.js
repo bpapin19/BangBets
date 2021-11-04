@@ -76,7 +76,6 @@ export default function Profile() {
                                 <span>{currentUser.email}</span>
                             </div>
                             {currentUser.displayName === 'client' && <Link to='/my-bets' className="btn btn-primary w-100 mb-2">My Bets</Link>}
-                            <Link to='/update-profile' className="btn btn-primary w-100">Update Profile</Link>
                         </Form>
                     </Card.Body>
                 </div>

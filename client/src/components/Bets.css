@@ -58,6 +58,15 @@ body {
     font-size: 18px;
 }
 
+.n-a {
+    text-align: center;
+    padding: 0px;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 18px;
+}
+
 .box-teams {
     font-size: 18px;
 }
