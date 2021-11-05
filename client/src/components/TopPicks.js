@@ -3,87 +3,103 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import moment from 'moment';
 import './BookieHome.css';
-
+import './TopPicks.css';
 import './Home.css';
-
 
   export default function TopPicks() {
     const {setClientAuth} = useAuth();
     const [topPicks, setTopPicks] = useState([]);
 
     var baseUrl = process.env.REACT_APP_ROUTE_URL;
-    let result = [];
 
     const Market_Names = {"h2h": "Moneyline", "spreads": "Spread", "totals": "Total"};
 
+    function containsObject(obj, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].betId === obj.betId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getMostCommonBets(activeBetList) {
+        var result = [];
+        var hash = new Map();
+        activeBetList.map(bet => {
+            bet.game.map((game) => {
+                if (hash.has(game.betId + "_" + game.outcome.name)) {
+                    hash.set(game.betId + "_" + game.outcome.name, hash.get(game.betId + "_" + game.outcome.name) + 1);
+                } else {
+                    hash.set(game.betId + "_" + game.outcome.name, 1);
+                }
+            });
+        });
+        hash.forEach((value,key) => {
+            var res = -1;
+            console.log(key + " " + value)
+            var top_game = {};
+            if (value > 1) {
+                res = key;
+                activeBetList.map(bet => {
+                    top_game = bet.game.find(game => game.betId + "_" + game.outcome.name === res);
+                    if (top_game && !containsObject(top_game, result)) {
+                        result.push(top_game);
+                    }
+                });
+            }
+        });
+        console.log(activeBetList)
+        if (result.length !== 0) {
+            setTopPicks(result);
+        } else {
+            var noTopPicksResult = [];
+            activeBetList.map(bet => {
+                bet.game.map(game => {
+                    noTopPicksResult.push(game);
+                });
+            });
+            setTopPicks(noTopPicksResult);
+        }
+        
+    }
+
     useEffect(() => {
-    setClientAuth();
+      setClientAuth();
       axios({
         method: 'get',
         url: baseUrl + "/api/bets/active"
       })
       .then(res => {
-        res.data.data.forEach(
-          r => { 
-              //if an array index by the value of id is not found, instantiate it. 
-              if( !result[r.userEmail] ){  
-                  //result gets a new index of the value at id. 
-                  result[r.userEmail] = [];
-              } 
-              //push that whole object from res.data into that list 
-              result[r.userEmail].push(r); 
-          }   
-        );
-        setTopPicks(result);
+          if (res.data.data.length !== 0){
+            getMostCommonBets(res.data.data);
+          } else {
+            setTopPicks(null);
+          }
       });
     }, []);
 
     return (
     <div className="app">
-      <h1 className="title">Welcome to Bang Bets</h1>
-      <h2 className="title">Top Picks</h2>
-      <div className="container">
-        {Object.values(TopPicks).map((user_bets, i) => {
-          return(
-            <div className="card">
-              <div className="user-email-container">
-              <div className="user-email">{Object.keys(TopPicks)[i]}</div>
-              <div className="num-bets">{user_bets.length} Bets</div>
-              </div>
-              <hr/>
-              <div className="user-bets">
-              {user_bets.map(user_bet => {
-                return(
-                  <div className="user-bet">
-                    <div className="user-bet-type">
-                        {user_bet.game.length === 1 && <div>Single Bet</div>}
-                        {user_bet.game.length > 1 && <div>Parlay - ({user_bet.game.length} picks)</div>}
-                        <div className="risk-win-bookie">Risk ${user_bet.betAmount} / Win ${user_bet.winAmount}</div>
+      <h1 className="top-picks-title">Welcome to Bang Bets</h1>
+      <h2 className="title">Top Picks this Week</h2>
+      <div className="top-picks-container">
+          {console.log(topPicks)}
+        {topPicks.map((bet, i) => {
+            console.log("wtf")
+            return(
+                <div>
+                <hr/>
+                <div className="bet-info">
+                    <div className="card-body-header">
+                        <div className="bet-name">{bet.outcome.name}<span className="price">{bet.outcome.price > 0 && <span>+</span>}{bet.outcome.price}</span></div>
+                        <div className="market-name">{Market_Names[bet.market.key]} <span>{bet.market.key === 'spreads' && bet.outcome.point > 0 && <span>+</span>}{bet.outcome.point}</span></div>
+                        <div className="game-name">{bet.sport} - {bet.away_team} @ {bet.home_team}</div>
+                        <div className="game-name">{moment(bet.commence_time).format('MMMM Do YYYY, h:mm a')}</div>
                     </div>
-                    <hr/>
-                    <div className="bet-info">
-                    {user_bet.game.map(user_bet_game=> {
-                      return(
-                        <div className="card-body-header">
-                            <div className="bet-name">{user_bet_game.outcome.name}<span className="price">{user_bet_game.outcome.price > 0 && <span>+</span>}{user_bet_game.outcome.price}</span></div>
-                            <div className="market-name">{Market_Names[user_bet_game.market.key]} <span>{user_bet_game.market.key === 'spreads' && user_bet_game.outcome.point > 0 && <span>+</span>}{user_bet_game.outcome.point}</span></div>
-                            <div className="game-name">{user_bet_game.sport} - {user_bet_game.away_team} @ {user_bet_game.home_team}</div>
-                            <div className="game-name">{moment(user_bet_game.commence_time).format('MMMM Do YYYY, h:mm a')}</div>
-                        </div>
-                      );
-                    })}
-                    </div>
-                    <div className="bookie-footer">
-                      <div className="bookie-timestamp">
-                          <small>Placed: {moment(user_bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-              </div>
-            </div>
-          )
+                </div>
+                </div>
+            )
         })}
       </div>
     </div>

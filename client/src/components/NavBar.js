@@ -19,7 +19,7 @@ export default function NavBar() {
         <div className="container flex">
             {currentUser && currentUser.displayName === "client" && <div>
                 <NavLink
-                    to="/football-bets"
+                    to="/"
                     exact
                     activeClassName="text-black"
                     className="site-title"

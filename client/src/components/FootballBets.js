@@ -129,9 +129,11 @@ import ActiveBets from './BetSlip';
                 return(
                     <div key={game.id} className="row row-container">
                         <div className="col col-container teams teams-padding">
-                            {moneyline ? <div className="box-teams">{moneyline.outcomes[0].name}</div> : <div>N/A</div>}
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[0].name}</div>)}
                             <hr/>
-                            {moneyline ? <div className="box-teams">{moneyline.outcomes[1].name}</div> : <div>N/A</div>}
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[1].name}</div>)}
                         </div>
                         <div className="col col-container moneyline">
                             {moneyline ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[0].price > 0 && <span>+</span>}{moneyline.outcomes[0].price}</button>  : <div className="n-a">N/A</div>}
