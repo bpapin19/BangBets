@@ -25,6 +25,7 @@
         "express": "^4.17.1",
         "firebase": "^8.3.2",
         "fs": "0.0.1-security",
+        "google-search-results-nodejs": "^2.0.1",
         "gridfs-stream": "^1.1.1",
         "moment": "^2.29.1",
         "mongoose": "^5.13.2",

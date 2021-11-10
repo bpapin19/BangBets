@@ -10,6 +10,8 @@ import './Home.css';
     const [betsByUserEmail, setBetsByUserEmail] = useState([]);
     const {setBookieAuth} = useAuth();
 
+    var teamsSearched = [];
+
     var baseUrl = process.env.REACT_APP_ROUTE_URL;
     let result = [];
 
@@ -75,26 +77,65 @@ import './Home.css';
 
     function areGamesOver(betToCheck) {
       var current_time = new Date();
-      var latestCommenceTime = new Date(2040, 0, 1);
+      var latest_commence_time = new Date(0);
+      
       for (var i=0; i < betToCheck.game.length; i++) {
-          if (Date.parse(betToCheck.game[i].commence_time) > latestCommenceTime) {
-              latestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
+        var commence_time = new Date(betToCheck.game[i].commence_time);
+          if (commence_time > latest_commence_time) {
+              latest_commence_time = commence_time;
           }
       }
       // has it been 4 hours since the latest game in bet started
-      if (current_time > moment(latestCommenceTime).add(4, 'h').toDate()) {
+      if (current_time > moment(latest_commence_time).add(4, 'h').toDate()) {
           return true;
       } else {
           return false;
       }
   }
 
+  function calculateResults(betToCheck, results) {
+    // Single bet
+    betToCheck.game.map(game => {
+      if (game.market.key === 'h2h') {
+        
+      } else if (game.market.key === 'spreads') {
+
+      } else if (game.market.key === 'totals') {
+
+      }
+    });
+  }
+
   function checkResults(betToCheck) {
     if (areGamesOver(betToCheck)) {
       //call API
-      console.log("game over");
+      betToCheck.game.map(game => {
+        // var momentDate = moment(game.commence_time).format('llll').toString();
+        // var start_time = momentDate.substring(0, 10);
+
+        // Only search for team once
+        if (!teamsSearched.includes(game.home_team)) {
+          axios({
+            method: 'get',
+            url: baseUrl + "/api/check-results/" + game.home_team
+          }).then(res => {
+            // calculate bet results based on res.data
+            teamsSearched.push(game.home_team);
+            calculateResults(betToCheck, res.results);
+          });
+        }
+      });
     } else {
-      console.log("game not over");
+      // betToCheck.game.map(game => {
+      //   var momentDate = moment(game.commence_time).format('llll').toString();
+      //   var start_time = momentDate.substring(0, 10);
+      //   axios({
+      //     method: 'get',
+      //     url: baseUrl + "/api/check-results/" + game.home_team + "&" + start_time
+      //   }).then(res => {
+      //     console.log(res.data);
+      //   });
+      // });
     }
   }
 

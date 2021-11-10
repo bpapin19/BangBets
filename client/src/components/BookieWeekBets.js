@@ -1,11 +1,10 @@
 import { React, useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import moment from 'moment';
 import './BookieHome.css';
+import SerpApi from 'google-search-results-nodejs';
 
 import './Home.css';
-
 
   export default function BookieWeekBets() {
     const [betsByUserEmail, setBetsByUserEmail] = useState([]);
@@ -13,7 +12,6 @@ import './Home.css';
     const [error, setError] = useState("");
     const [isPaid, setIsPaid] = useState(false);
     const [transition, setTransition] = useState(false);
-    const {setBookieAuth} = useAuth();
 
     var baseUrl = process.env.REACT_APP_ROUTE_URL;
     let result = [];
@@ -63,7 +61,7 @@ import './Home.css';
       })
       .then(res => {
         res.data.data.forEach(
-          r => { 
+          r => {
               //if an array index by the value of id is not found, instantiate it. 
               if( !result[r.userEmail] ){  
                   //result gets a new index of the value at id. 
@@ -99,31 +97,6 @@ import './Home.css';
         setError(res.data.message);
       });
     }
-
-    function areGamesOver(betToCheck) {
-      var current_time = new Date();
-      var latestCommenceTime = new Date(2040, 0, 1);
-      for (var i=0; i < betToCheck.game.length; i++) {
-          if (Date.parse(betToCheck.game[i].commence_time) > latestCommenceTime) {
-              latestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
-          }
-      }
-      // has it been 4 hours since the latest game in bet started
-      if (current_time > moment(latestCommenceTime).add(4, 'h').toDate()) {
-          return true;
-      } else {
-          return false;
-      }
-  }
-
-  function checkResults(betToCheck) {
-    if (areGamesOver(betToCheck)) {
-      //call API
-      console.log("game over");
-    } else {
-      console.log("game not over");
-    }
-  }
 
     function getAbbr(sport, team) {
       if (sport === "NFL") {

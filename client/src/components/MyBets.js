@@ -12,7 +12,7 @@ export default function MyBets() {
     const { currentUser } = useAuth();
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
-    const [deleted, setDeleted] = useState(false);
+    // const [deleted, setDeleted] = useState(false);
     const [transition, setTransition] = useState("");
 
     const Market_Names = {"h2h": "Moneyline", "spreads": "Spread", "totals": "Total"};
@@ -55,40 +55,40 @@ export default function MyBets() {
 
     var baseUrl = process.env.REACT_APP_ROUTE_URL;
 
-    function isGameLive(betToCheck) {
-        var current_time = new Date();
-        var soonestCommenceTime = new Date(2040, 0, 1);
-        for (var i=0; i < betToCheck.game.length; i++) {
-            if (Date.parse(betToCheck.game[i].commence_time) < soonestCommenceTime) {
-                soonestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
-            }
-        }
-        if (current_time > soonestCommenceTime) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // function isGameLive(betToCheck) {
+    //     var current_time = new Date();
+    //     var soonestCommenceTime = new Date(2040, 0, 1);
+    //     for (var i=0; i < betToCheck.game.length; i++) {
+    //         if (Date.parse(betToCheck.game[i].commence_time) < soonestCommenceTime) {
+    //             soonestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
+    //         }
+    //     }
+    //     if (current_time > soonestCommenceTime) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
-    function deleteBet(betToDelete){
-        setDeleted(false);
-        if (!isGameLive(betToDelete)) {
-            axios({
-                method: 'delete',
-                url: `${baseUrl}/api/bet/${betToDelete._id}`,
-              })
-              .then(res => {
-                  setSuccess("Bet was successfully cancelled");
-                  setDeleted(true);
-                  var newBetsArray = betsArray.slice();
-                  var index = newBetsArray.indexOf(betToDelete);
-                  newBetsArray.splice(index, 1);
-                  setBetsArray(newBetsArray);
-              });
-        } else {
-            setError("Cannot cancel live bet");
-        }
-    }
+    // function deleteBet(betToDelete){
+    //     setDeleted(false);
+    //     if (!isGameLive(betToDelete)) {
+    //         axios({
+    //             method: 'delete',
+    //             url: `${baseUrl}/api/bet/${betToDelete._id}`,
+    //           })
+    //           .then(res => {
+    //               setSuccess("Bet was successfully cancelled");
+    //               setDeleted(true);
+    //               var newBetsArray = betsArray.slice();
+    //               var index = newBetsArray.indexOf(betToDelete);
+    //               newBetsArray.splice(index, 1);
+    //               setBetsArray(newBetsArray);
+    //           });
+    //     } else {
+    //         setError("Cannot cancel live bet");
+    //     }
+    // }
 
     function reverseArray(betsArray) {
         var reversedBetsArray = [];
@@ -114,7 +114,7 @@ export default function MyBets() {
           .then(res => {
             setBetsArray(res.data.data);
           });
-      }, [deleted]); // eslint-disable-line react-hooks/exhaustive-deps
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
       useEffect(() => {
         if (success !== "") {
@@ -175,7 +175,7 @@ export default function MyBets() {
                                     <div className="my-bet-list">
                                         {bet.game.map(game => {
                                             return (
-                                                <div className="card-body-header">
+                                                <div key={game.betId} className="card-body-header">
                                                     <div className="bet-name">{game.outcome.name}<span className="price">{game.outcome.price > 0 && <span>+</span>}{game.outcome.price}</span></div>
                                                     <div className="market-name">{Market_Names[game.market.key]} <span>{game.market.key === 'spreads' && game.outcome.point > 0 && <span>+</span>}{game.outcome.point}</span></div>
                                                     <div className="game-name">{game.sport} - {getAbbr(game.sport, game.away_team)} @ {getAbbr(game.sport, game.home_team)}</div>
@@ -187,9 +187,6 @@ export default function MyBets() {
                                     <div className="footer">
                                         <div className="timestamp">
                                             <small>Placed: {moment(bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
-                                        </div>
-                                        <div className="btn-container">
-                                            <button className="cancel-btn" onClick={() => {deleteBet(bet)}}>Cancel Bet</button>
                                         </div>
                                     </div>
                                 </div>

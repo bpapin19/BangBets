@@ -37,7 +37,6 @@ import './Home.css';
         });
         hash.forEach((value,key) => {
             var res = -1;
-            console.log(key + " " + value)
             var top_game = {};
             if (value > 1) {
                 res = key;
@@ -49,7 +48,6 @@ import './Home.css';
                 });
             }
         });
-        console.log(activeBetList)
         if (result.length !== 0) {
             setTopPicks(result);
         } else {
@@ -84,20 +82,15 @@ import './Home.css';
       <h1 className="top-picks-title">Welcome to Bang Bets</h1>
       <h2 className="title">Top Picks this Week</h2>
       <div className="top-picks-container">
-          {console.log(topPicks)}
         {topPicks.map((bet, i) => {
-            console.log("wtf")
             return(
-                <div>
-                <hr/>
-                <div className="bet-info">
+                <div key={bet.betId} className="bet-info">
                     <div className="card-body-header">
                         <div className="bet-name">{bet.outcome.name}<span className="price">{bet.outcome.price > 0 && <span>+</span>}{bet.outcome.price}</span></div>
                         <div className="market-name">{Market_Names[bet.market.key]} <span>{bet.market.key === 'spreads' && bet.outcome.point > 0 && <span>+</span>}{bet.outcome.point}</span></div>
                         <div className="game-name">{bet.sport} - {bet.away_team} @ {bet.home_team}</div>
                         <div className="game-name">{moment(bet.commence_time).format('MMMM Do YYYY, h:mm a')}</div>
                     </div>
-                </div>
                 </div>
             )
         })}

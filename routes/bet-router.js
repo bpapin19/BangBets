@@ -9,6 +9,7 @@ router.post('/bet', BetCtrl.createBet);
 router.put('/bet/:id', BetCtrl.updateBet);
 router.delete('/bet/:id', BetCtrl.deleteBet);
 router.get('/bet/:id', BetCtrl.getBetById);
+router.get('/check-results/:home_team', BetCtrl.getBetResults);
 router.get('/bets', BetCtrl.getBets);
 router.get('/bets/active', BetCtrl.getActiveBets);
 router.get('/bets/week', BetCtrl.getWeekBets);

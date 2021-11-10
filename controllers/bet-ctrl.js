@@ -1,5 +1,7 @@
 const Bet = require('../models/bet-model');
 const moment = require('moment');
+const SerpApi = require('google-search-results-nodejs');
+const search = new SerpApi.GoogleSearch(process.env.GOOGLE_SPORTS_RESULTS_API_KEY);
 
 createBet = (req, res) => {
 
@@ -126,15 +128,15 @@ deleteBet = (req, res) => {
 getBetById = async (req, res) => {
     await Bet.findOne({ _id: req.params.id }, (err, bet) => {
         if (err) {
-            return res.status(400).json({ success: false, error: err })
+            return res.status(400).json({ success: false, error: err });
         }
 
         if (!bet) {
             return res
                 .status(404)
-                .json({ success: false, error: `Bet not found` })
+                .json({ success: false, error: `Bet not found` });
         }
-        return res.status(200).json({ success: true, data: bet })
+        return res.status(200).json({ success: true, data: bet });
     }).catch(err => console.log(err))
 }
 
@@ -184,6 +186,34 @@ getWeekBets = async (req, res) => {
     }).catch(err => console.log(err));
 }
 
+getBetResults = async (req, res) => {
+    const params = {
+        q: req.params.home_team,
+        location: "austin, texas, united states"
+      };
+    // Show result as JSON
+    search.json(params, function(data) {
+        console.log(req.params.home_team);
+
+        if (data.sports_results.game_spotlight && data.sports_results.game_spotlight.stage === "Final") {
+            return res.status(200).json({ success: true, results: data.sports_results.game_spotlight});
+        }
+
+        console.log(data.sports_results.game_spotlight);
+        // data.sports_results.games.map(game => {
+        //     var formattedDate = (game.date.replace(/\./g, ''));
+        //     console.log(game);
+        //     // console.log(req.params.start_time);
+        //     if (game.hasOwnProperty("status") && game.date === req.params.start_time) {
+        //         console.log(game)
+        //         return res.status(200).json({ success: true, data: game });
+        //     };
+        //     // console.log(game);
+        // });
+        return res.status(400)
+    });
+}
+
 getBetsByUserId = async (req, res) => {
     await Bet.find({userId: req.params.id}, (err, bets) => {
         if (err) {
@@ -206,6 +236,7 @@ module.exports = {
     getBets,
     getActiveBets,
     getWeekBets,
+    getBetResults,
     getBetById,
     getBetsByUserId
 }

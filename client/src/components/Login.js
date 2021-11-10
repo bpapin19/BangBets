@@ -26,16 +26,14 @@ export default function Login() {
             if (client) {
                 if (emailRef.current.value !== "joselopez@gmail.com") {
                     await login(emailRef.current.value, passwordRef.current.value);
-                    history.push('/football-bets');
+                    history.push('/');
                 } else {
                     setError("Failed to sign in");
                 }
             } else if (bookie) {
                 if (emailRef.current.value === "newertest@gmail.com") {
-                    console.log(currentUser)
                     await login(emailRef.current.value, passwordRef.current.value);
                     history.push('/bookie-active-bets');
-                    console.log(currentUser)
                 } else {
                     setError("Failed to sign in");
                 }
