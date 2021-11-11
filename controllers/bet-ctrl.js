@@ -90,20 +90,20 @@ updateBetResult = async (req, res) => {
                 message: 'Bet not found!',
             })
         }
-        bet.status = true;
+        bet.result = req.params.result;
         bet
             .save()
             .then(() => {
                 return res.status(200).json({
                     success: true,
                     id: bet._id,
-                    message: 'Bet status updated',
+                    message: 'Bet result updated',
                 })
             })
             .catch(error => {
                 return res.status(404).json({
                     error,
-                    message: 'Failed to update bet status',
+                    message: 'Failed to update bet result',
                 });
             });
     });
@@ -237,6 +237,7 @@ module.exports = {
     getActiveBets,
     getWeekBets,
     getBetResults,
+    updateBetResult,
     getBetById,
     getBetsByUserId
 }

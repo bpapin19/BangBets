@@ -157,6 +157,11 @@ import './Home.css';
                         {user_bet.game.length === 1 && <div>Single Bet</div>}
                         {user_bet.game.length > 1 && <div>Parlay - ({user_bet.game.length} picks)</div>}
                         <div className="risk-win-bookie">Risk ${user_bet.betAmount} / Win ${user_bet.winAmount}</div>
+                        <div className="bookie-bet-result">
+                            {user_bet.result==="in progress" && <div className="in-progress">In Progress</div>}
+                            {user_bet.result==="win" && <div className="bookie-win">Win</div>}
+                            {user_bet.result==="loss" && <div className="bookie-loss">Loss</div>}
+                        </div>
                     </div>
                     <hr/>
                     <div className="bet-info">

@@ -171,6 +171,23 @@
   margin: 0 0 40px;
 }
 
+.client-paid-out {
+  text-align: center;
+  color: green;
+}
+
+.bet-result {
+  float: right;
+  right: 20px;
+  top: 20px;
+  font-size: 15px;
+  position: absolute;
+}
+
+.bet-header, .bet-result {
+  display: inline-block;
+}
+
 @media (max-width:1000px){
   .bet-cards {
     width: 100%;

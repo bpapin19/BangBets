@@ -130,6 +130,11 @@ import './Home.css';
                         {user_bet.game.length === 1 && <div>Single Bet</div>}
                         {user_bet.game.length > 1 && <div>Parlay - ({user_bet.game.length} picks)</div>}
                         <div className="risk-win-bookie">Risk ${user_bet.betAmount} / Win ${user_bet.winAmount}</div>
+                        <div className="bookie-bet-result">
+                            {user_bet.result==="in progress" && <div className="in-progress">In Progress</div>}
+                            {user_bet.result==="win" && <div className="win">Win</div>}
+                            {user_bet.result==="loss" && <div className="loss">Loss</div>}
+                        </div>
                     </div>
                     <hr/>
                     <div className="bet-info">
@@ -149,7 +154,7 @@ import './Home.css';
                           <small>Placed: {moment(user_bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
                       </div>
                       <div className="payout-button-container">
-                        {(!user_bet.status) && <button className="payout-button" onClick = {() => updatePayoutStatus(user_bet._id)}>Mark as Paid Out</button>}
+                        {(!user_bet.status && user_bet.result === "win") && <button className="payout-button" onClick = {() => updatePayoutStatus(user_bet._id)}>Mark as Paid Out</button>}
                         {(user_bet.status) && <div className="paid-out">Paid Out</div>}
                       </div>
                     </div>

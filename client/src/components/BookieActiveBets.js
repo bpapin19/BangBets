@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import moment from 'moment';
 import './BookieHome.css';
+import { MdTimer } from 'react-icons/md';
 
 import './Home.css';
 
@@ -94,16 +95,53 @@ import './Home.css';
   }
 
   function calculateResults(betToCheck, results) {
+    var result = "in progress";
+    var team1 = {"name": results.teams[0].name, "score": results.teams[0].score.total};
+    var team2 = {"name": results.teams[1].name, "score": results.teams[1].score.total};
     // Single bet
     betToCheck.game.map(game => {
-      if (game.market.key === 'h2h') {
-        
-      } else if (game.market.key === 'spreads') {
+      if (result === "" || result === "win") {
+        if (game.market.key === 'h2h') {
+          if (team1.name === game.outcome.name) {
+            if (team1.score > team2.score) {
+              result = "win";
+            } else {
+              result = "loss";
+            }
+          } else if (team2.name === game.outcome.name) {
+            if (team2.score > team1.score) {
+              result = "win";
+            } else {
+              result = "loss";
+            }
+          }
+        } else if (game.market.key === 'spreads') {
 
-      } else if (game.market.key === 'totals') {
-
+        } else if (game.market.key === 'totals') {
+          var total = team1.score + team2.score;
+          if (game.outcome.name === "Over") {
+            if (total > game.outcome.point) {
+              result = "win";
+            } else {
+              result = "loss";
+            }
+          } else if (game.outcome.name === "Under") {
+            if (total < game.outcome.point) {
+              result = "win";
+            } else {
+              result = "loss";
+            }
+          }
+        }
       }
     });
+    // Update bet result
+      axios({
+        method: 'get',
+        url: baseUrl + "/api/result?id=" + betToCheck.id + "&result=" + result
+      }).then(res => {
+        console.log(res);
+      });
   }
 
   function checkResults(betToCheck) {
@@ -112,30 +150,14 @@ import './Home.css';
       betToCheck.game.map(game => {
         // var momentDate = moment(game.commence_time).format('llll').toString();
         // var start_time = momentDate.substring(0, 10);
-
-        // Only search for team once
-        if (!teamsSearched.includes(game.home_team)) {
-          axios({
-            method: 'get',
-            url: baseUrl + "/api/check-results/" + game.home_team
-          }).then(res => {
-            // calculate bet results based on res.data
-            teamsSearched.push(game.home_team);
-            calculateResults(betToCheck, res.results);
-          });
-        }
+        axios({
+          method: 'get',
+          url: baseUrl + "/api/check-results/" + game.home_team
+        }).then(res => {
+          // calculate bet results based on res.data
+          calculateResults(betToCheck, res.results);
+        });
       });
-    } else {
-      // betToCheck.game.map(game => {
-      //   var momentDate = moment(game.commence_time).format('llll').toString();
-      //   var start_time = momentDate.substring(0, 10);
-      //   axios({
-      //     method: 'get',
-      //     url: baseUrl + "/api/check-results/" + game.home_team + "&" + start_time
-      //   }).then(res => {
-      //     console.log(res.data);
-      //   });
-      // });
     }
   }
 
@@ -170,6 +192,11 @@ import './Home.css';
                         {user_bet.game.length === 1 && <div>Single Bet</div>}
                         {user_bet.game.length > 1 && <div>Parlay - ({user_bet.game.length} picks)</div>}
                         <div className="risk-win-bookie">Risk ${user_bet.betAmount} / Win ${user_bet.winAmount}</div>
+                        <div className="bookie-bet-result">
+                            {user_bet.result==="in progress" && <div className="in-progress">In Progress</div>}
+                            {user_bet.result==="win" && <div className="win">Win</div>}
+                            {user_bet.result==="loss" && <div className="loss">Loss</div>}
+                        </div>
                     </div>
                     <hr/>
                     <div className="bet-info">

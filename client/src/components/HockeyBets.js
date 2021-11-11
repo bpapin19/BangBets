@@ -5,9 +5,9 @@ import './Bets.css';
 import ActiveBets from './BetSlip';
 
 
-  export default function BasketballBets() {
+  export default function HockeyBets() {
 
-    const [basketballBets, setBasketballBets] = useState([]);
+    const [hockeyBets, setHockeyBets] = useState([]);
     const [activeBets, setActiveBets] = useState([]);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
@@ -20,11 +20,11 @@ import ActiveBets from './BetSlip';
     useEffect(() => {
         axios({
             method: 'get',
-            url: baseOddsUrl + `/v4/sports/basketball_nba/odds/?apiKey=${process.env.REACT_APP_ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`,
+            url: baseOddsUrl + `/v4/sports/icehockey_nhl/odds/?apiKey=${process.env.REACT_APP_ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`,
           })
           .then(res => {
             // Set arrays
-            setBasketballBets(res.data);
+            setHockeyBets(res.data);
           });
     }, []);
 
@@ -74,7 +74,7 @@ import ActiveBets from './BetSlip';
     function getSportsBook(booksArray) {
         // Looking for barstool
         for (var i=0; i < booksArray.length; i++) {
-            if (booksArray[i].key === "barstool" || booksArray[i].key === "fanduel") {
+            if (booksArray[i].key === "barstool") {
                 return booksArray[i];
             }
         }
@@ -102,7 +102,7 @@ import ActiveBets from './BetSlip';
                     <div className="">Totals</div>
                 </div>
             </div>
-            {basketballBets.map(game => {
+            {hockeyBets.map(game => {
                 var moneyline = "";
                 var spread = "";
                 var total = "";

@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FootballBets from "./components/FootballBets";
 import BasketballBets from "./components/BasketballBets";
 import BaseballBets from "./components/BaseballBets";
+import HockeyBets from "./components/HockeyBets";
+import CollegeFootballBets from "./components/CollegeFootballBets";
 import BookieActiveBets from "./components/BookieActiveBets";
 import BookieWeekBets from "./components/BookieWeekBets";
 import BookieAllBets from "./components/BookieAllBets";
@@ -29,6 +31,8 @@ export default function App() {
           <PrivateRoute component={FootballBets} path='/football-bets' exact/>
           <PrivateRoute component={BasketballBets} path='/basketball-bets' exact/>
           <PrivateRoute component={BaseballBets} path='/baseball-bets' exact/>
+          <PrivateRoute component={HockeyBets} path='/hockey-bets' exact/>
+          <PrivateRoute component={CollegeFootballBets} path='/college-football-bets' exact/>
           <PrivateRoute component={BookieActiveBets} path='/bookie-active-bets' exact/>
           <PrivateRoute component={BookieWeekBets} path='/bookie-week-bets' exact/>
           <PrivateRoute component={BookieAllBets} path='/bookie-all-bets' exact/>

@@ -5,9 +5,9 @@ import './Bets.css';
 import ActiveBets from './BetSlip';
 
 
-  export default function BasketballBets() {
+  export default function CollegeFootballBets() {
 
-    const [basketballBets, setBasketballBets] = useState([]);
+    const [collegeFootballBets, setCollegeFootballBets] = useState([]);
     const [activeBets, setActiveBets] = useState([]);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
@@ -20,11 +20,11 @@ import ActiveBets from './BetSlip';
     useEffect(() => {
         axios({
             method: 'get',
-            url: baseOddsUrl + `/v4/sports/basketball_nba/odds/?apiKey=${process.env.REACT_APP_ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`,
+            url: baseOddsUrl + `/v4/sports/americanfootball_ncaaf/odds/?apiKey=${process.env.REACT_APP_ODDS_API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american`,
           })
           .then(res => {
             // Set arrays
-            setBasketballBets(res.data);
+            setCollegeFootballBets(res.data);
           });
     }, []);
 
@@ -102,7 +102,8 @@ import ActiveBets from './BetSlip';
                     <div className="">Totals</div>
                 </div>
             </div>
-            {basketballBets.map(game => {
+            {collegeFootballBets.map(game => {
+                console.log(game)
                 var moneyline = "";
                 var spread = "";
                 var total = "";

@@ -84,7 +84,7 @@ export default function NavBar() {
               <div>NHL</div>
             </NavLink>
             <NavLink
-              to="mma-bets"
+              to="college-football-bets"
               activeClassName="sports-bar-active"
               className="navlink-title"
             >

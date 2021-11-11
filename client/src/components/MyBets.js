@@ -5,6 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 import moment from 'moment';
 import "./MyBets.css";
 import { FaFileInvoiceDollar } from 'react-icons/fa';
+import { MdTimer } from 'react-icons/md';
+
 
 export default function MyBets() {
 
@@ -168,10 +170,18 @@ export default function MyBets() {
                             <div className="container">
                                 <div className="card">
                                     <div className="my-bets-type">
-                                        {bet.game.length === 1 && <div>Single Bet</div>}
-                                        {bet.game.length > 1 && <div>Parlay - ({bet.game.length} picks)</div>}
-                                        <div className="risk-win">Risk ${bet.betAmount} / Win ${bet.winAmount}</div>
+                                        <div className="bet-header">
+                                            {bet.game.length === 1 && <div>Single Bet</div>}
+                                            {bet.game.length > 1 && <div>Parlay - ({bet.game.length} picks)</div>}
+                                            <div className="risk-win">Risk ${bet.betAmount} / Win ${bet.winAmount}</div>
+                                        </div>
+                                        <div className="bet-result">
+                                            {bet.result==="in progress" && <div><MdTimer size={30}/></div>}
+                                            {bet.result==="win" && <div className="win">W</div>}
+                                            {bet.result==="loss" && <div className="loss">L</div>}
+                                        </div>
                                     </div>
+                                    
                                     <div className="my-bet-list">
                                         {bet.game.map(game => {
                                             return (
@@ -185,6 +195,7 @@ export default function MyBets() {
                                         })}
                                     </div>
                                     <div className="footer">
+                                        {(bet.status) && <div className="client-paid-out">Paid Out</div>}
                                         <div className="timestamp">
                                             <small>Placed: {moment(bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
                                         </div>

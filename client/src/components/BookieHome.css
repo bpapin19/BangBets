@@ -108,3 +108,19 @@
     font-size: 15px;
     font-weight: bold;
 }
+
+.bookie-bet-result {
+    font-size: 14px;
+}
+
+.in-progress {
+    color: #364250;
+}
+
+.win {
+    color: green;
+}
+
+.loss {
+    color: rgb(193, 36, 36);
+}

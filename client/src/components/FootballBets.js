@@ -74,7 +74,7 @@ import ActiveBets from './BetSlip';
     function getSportsBook(booksArray) {
         // Looking for barstool
         for (var i=0; i < booksArray.length; i++) {
-            if (booksArray[i].key === "barstool") {
+            if (booksArray[i].key === "barstool" || booksArray[i].key === "fanduel") {
                 return booksArray[i];
             }
         }
