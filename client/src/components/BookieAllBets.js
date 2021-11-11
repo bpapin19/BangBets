@@ -99,31 +99,6 @@ import './Home.css';
       });
     }
 
-    function areGamesOver(betToCheck) {
-      var current_time = new Date();
-      var latestCommenceTime = new Date(2040, 0, 1);
-      for (var i=0; i < betToCheck.game.length; i++) {
-          if (Date.parse(betToCheck.game[i].commence_time) > latestCommenceTime) {
-              latestCommenceTime = Date.parse(betToCheck.game[i].commence_time);
-          }
-      }
-      // has it been 4 hours since the latest game in bet started
-      if (current_time > moment(latestCommenceTime).add(4, 'h').toDate()) {
-          return true;
-      } else {
-          return false;
-      }
-  }
-
-  function checkResults(betToCheck) {
-    if (areGamesOver(betToCheck)) {
-      //call API
-      console.log("game over");
-    } else {
-      console.log("game not over");
-    }
-  }
-
     function getAbbr(sport, team) {
       if (sport === "NFL") {
           return NFL_Teams[team];
@@ -150,7 +125,6 @@ import './Home.css';
               <hr/>
               <div className="user-bets">
               {user_bets.map(user_bet => {
-                checkResults(user_bet);
                 return(
                   <div className="user-bet">
                     <div className="user-bet-type">
@@ -180,9 +154,8 @@ import './Home.css';
                       <div className="bookie-timestamp">
                           <small>Placed: {moment(user_bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
                       </div>
-                      {console.log(user_bet.status)}
                       <div className="payout-button-container">
-                        {(!user_bet.status) && <button className="payout-button" onClick = {() => updatePayoutStatus(user_bet._id)}>Mark as Paid Out</button>}
+                        {(!user_bet.status && user_bet.result === "win") && <button className="payout-button" onClick = {() => updatePayoutStatus(user_bet._id)}>Mark as Paid Out</button>}
                         {(user_bet.status) && <div className="paid-out">Paid Out</div>}
                       </div>
                     </div>

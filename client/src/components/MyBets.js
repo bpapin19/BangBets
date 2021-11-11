@@ -197,7 +197,7 @@ export default function MyBets() {
                                     <div className="footer">
                                         {(bet.status) && <div className="client-paid-out">Paid Out</div>}
                                         <div className="timestamp">
-                                            <small>Placed: {moment(bet.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</small>
+                                            <small>Placed: {moment(bet.createdAt).format('MMMM Do YYYY')}</small>
                                         </div>
                                     </div>
                                 </div>

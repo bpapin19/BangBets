@@ -88,24 +88,27 @@ updateBetResult = async (req, res) => {
             return res.status(404).json({
                 err,
                 message: 'Bet not found!',
-            })
-        }
-        bet.result = req.params.result;
-        bet
-            .save()
-            .then(() => {
-                return res.status(200).json({
-                    success: true,
-                    id: bet._id,
-                    message: 'Bet result updated',
-                })
-            })
-            .catch(error => {
-                return res.status(404).json({
-                    error,
-                    message: 'Failed to update bet result',
-                });
             });
+        }
+        console.log(req.params)
+        if (req.params.result === "in progress" || req.params.result === "win" || req.params.result === "loss") {
+            bet.result = req.params.result;
+            bet
+                .save()
+                .then(() => {
+                    return res.status(200).json({
+                        success: true,
+                        id: bet._id,
+                        message: 'Bet result updated',
+                    })
+                })
+                .catch(error => {
+                    return res.status(404).json({
+                        error,
+                        message: 'Failed to update bet result',
+                    });
+                });
+        }
     });
 };
 
@@ -194,12 +197,10 @@ getBetResults = async (req, res) => {
     // Show result as JSON
     search.json(params, function(data) {
         console.log(req.params.home_team);
-
-        if (data.sports_results.game_spotlight && data.sports_results.game_spotlight.stage === "Final") {
+        console.log(data.sports_results.game_spotlight);
+        if (data.sports_results.game_spotlight && data.sports_results.game_spotlight.stage.includes("Final")) {
             return res.status(200).json({ success: true, results: data.sports_results.game_spotlight});
         }
-
-        console.log(data.sports_results.game_spotlight);
         // data.sports_results.games.map(game => {
         //     var formattedDate = (game.date.replace(/\./g, ''));
         //     console.log(game);

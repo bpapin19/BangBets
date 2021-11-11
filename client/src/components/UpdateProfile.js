@@ -67,7 +67,6 @@ export default function UpdateProfile() {
                     history.push({pathname: '/profile'});
                 }
             }).catch((error) => {
-                console.log(error)
                 setError(error.message);
             }).finally(() => {
                 setLoading(false);

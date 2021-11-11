@@ -103,7 +103,6 @@ import ActiveBets from './BetSlip';
                 </div>
             </div>
             {collegeFootballBets.map(game => {
-                console.log(game)
                 var moneyline = "";
                 var spread = "";
                 var total = "";

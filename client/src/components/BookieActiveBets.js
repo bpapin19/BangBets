@@ -3,15 +3,12 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import moment from 'moment';
 import './BookieHome.css';
-import { MdTimer } from 'react-icons/md';
 
 import './Home.css';
 
   export default function BookieActiveBets() {
     const [betsByUserEmail, setBetsByUserEmail] = useState([]);
     const {setBookieAuth} = useAuth();
-
-    var teamsSearched = [];
 
     var baseUrl = process.env.REACT_APP_ROUTE_URL;
     let result = [];
@@ -96,11 +93,10 @@ import './Home.css';
 
   function calculateResults(betToCheck, results) {
     var result = "in progress";
-    var team1 = {"name": results.teams[0].name, "score": results.teams[0].score.total};
-    var team2 = {"name": results.teams[1].name, "score": results.teams[1].score.total};
-    // Single bet
+    var team1 = {"name": results.teams[0].name, "score": parseInt(results.teams[0].score.total)};
+    var team2 = {"name": results.teams[1].name, "score": parseInt(results.teams[1].score.total)};
     betToCheck.game.map(game => {
-      if (result === "" || result === "win") {
+      if (result === "in progress" || result === "win") {
         if (game.market.key === 'h2h') {
           if (team1.name === game.outcome.name) {
             if (team1.score > team2.score) {
@@ -116,7 +112,35 @@ import './Home.css';
             }
           }
         } else if (game.market.key === 'spreads') {
-
+          if (team1.name === game.outcome.name) {
+            if (game.outcome.point > 0) {
+              if (team1.score + game.outcome.point > team2.score) {
+                result = "win";
+              } else {
+                result = "loss";
+              }
+            } else if (game.outcome.point < 0) {
+              if (team1.score - Math.abs(game.outcome.point) > team2.score) {
+                result = "win";
+              } else {
+                result = "loss";
+              }
+            }
+          } else if (team2.name === game.outcome.name) {
+            if (game.outcome.point > 0) {
+              if (team2.score + game.outcome.point > team1.score) {
+                result = "win";
+              } else {
+                result = "loss";
+              }
+            } else if (game.outcome.point < 0) {
+              if (team2.score - Math.abs(game.outcome.point) > team1.score) {
+                result = "win";
+              } else {
+                result = "loss";
+              }
+            }
+          }
         } else if (game.market.key === 'totals') {
           var total = team1.score + team2.score;
           if (game.outcome.name === "Over") {
@@ -137,8 +161,8 @@ import './Home.css';
     });
     // Update bet result
       axios({
-        method: 'get',
-        url: baseUrl + "/api/result?id=" + betToCheck.id + "&result=" + result
+        method: 'put',
+        url: baseUrl + "/api/result/" + betToCheck._id + "/" + result
       }).then(res => {
         console.log(res);
       });
@@ -155,7 +179,7 @@ import './Home.css';
           url: baseUrl + "/api/check-results/" + game.home_team
         }).then(res => {
           // calculate bet results based on res.data
-          calculateResults(betToCheck, res.results);
+          calculateResults(betToCheck, res.data.results);
         });
       });
     }
@@ -187,7 +211,7 @@ import './Home.css';
               {user_bets.map(user_bet => {
                 checkResults(user_bet);
                 return(
-                  <div className="user-bet">
+                  <div key={user_bet._id} className="user-bet">
                     <div className="user-bet-type">
                         {user_bet.game.length === 1 && <div>Single Bet</div>}
                         {user_bet.game.length > 1 && <div>Parlay - ({user_bet.game.length} picks)</div>}

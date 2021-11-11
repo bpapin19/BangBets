@@ -27,7 +27,7 @@ import './Home.css';
         var result = [];
         var hash = new Map();
         activeBetList.map(bet => {
-            bet.game.map((game) => {
+            bet.game.map(game => {
                 if (hash.has(game.betId + "_" + game.outcome.name)) {
                     hash.set(game.betId + "_" + game.outcome.name, hash.get(game.betId + "_" + game.outcome.name) + 1);
                 } else {

@@ -81,7 +81,6 @@ import BetSlip from './BetSlip';
                     <div className="">Totals</div>
                 </div>
             </div>
-            {console.log(baseballBets)}
             {baseballBets.map(game => {
                 var moneyline = "";
                 var spread = "";
