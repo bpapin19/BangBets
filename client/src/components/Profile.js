@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Alert, Container, Form } from 'react-bootstrap'
-import { useAuth } from '../contexts/AuthContext'
+import { Card, Button, Alert, Container, Form } from 'react-bootstrap';
+import { useAuth } from '../contexts/AuthContext';
 import { Link, useHistory } from "react-router-dom";
 
 export default function Profile() {
@@ -44,7 +44,8 @@ export default function Profile() {
                                 <strong>Email: </strong> 
                                 <span>{currentUser.email}</span>
                             </div>
-                            {currentUser.displayName === 'client' && <Link to='/my-bets' className="btn btn-primary w-100 mb-2">My Bets</Link>}
+                            {currentUser.displayName === 'client' && <Link to='/my-bets' className="btn btn-danger w-100 mb-2">My Bets</Link>}
+                            <Link to='/update-password' className="btn btn-danger w-100 mb-2">Update Password</Link>
                         </Form>
                     </Card.Body>
                 </div>

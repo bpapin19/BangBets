@@ -31,18 +31,8 @@ export function AuthProvider({children}) {
         return auth.signOut();
     }
 
-    function updateUsername(username) {
-        return currentUser.updateProfile({
-            displayName: username
-        });
-    }
-
     function resetPassword(email) {
         return auth.sendPasswordResetEmail(email);
-    }
-
-    function updateEmail(email) {
-        return currentUser.updateEmail(email);
     }
 
     function updatePassword(password) {
@@ -64,9 +54,7 @@ export function AuthProvider({children}) {
         setBookieAuth,
         logout,
         resetPassword,
-        updateEmail,
-        updatePassword,
-        updateUsername
+        updatePassword
     }
     
     return (

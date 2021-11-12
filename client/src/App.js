@@ -10,6 +10,7 @@ import BookieActiveBets from "./components/BookieActiveBets";
 import BookieWeekBets from "./components/BookieWeekBets";
 import BookieAllBets from "./components/BookieAllBets";
 import Profile from "./components/Profile";
+import UpdatePassword from "./components/UpdatePassword";
 import NavBar from "./components/NavBar";
 import Login from "./components/Login";
 import MyBets from "./components/MyBets";
@@ -37,6 +38,7 @@ export default function App() {
           <PrivateRoute component={BookieWeekBets} path='/bookie-week-bets' exact/>
           <PrivateRoute component={BookieAllBets} path='/bookie-all-bets' exact/>
           <PrivateRoute component={Profile} path='/profile' />
+          <PrivateRoute component={UpdatePassword} path='/update-password' />
           <ClientRoute component={MyBets} path='/my-bets' />
           <Route component={Login} path='/login' />
           <Route component={ForgotPassword} path='/forgot-password' />

@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
 import axios from 'axios';
+
 import './Bets.css';
-import BetSlip from './BetSlip';
+import ActiveBets from './BetSlip';
 
 
   export default function BaseballBets() {
@@ -11,6 +11,7 @@ import BetSlip from './BetSlip';
     const [activeBets, setActiveBets] = useState([]);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
+    const [transition, setTransition] = useState(false);
 
     var activeBetsArray = [];
 
@@ -27,9 +28,29 @@ import BetSlip from './BetSlip';
           });
     }, []);
 
+    useEffect(() => {
+        if (success !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setSuccess("");
+            }, 3000);
+        }
+    }, [success]);
+
+    useEffect(() => {
+        if (error !== "") {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setError("");
+            }, 3000);
+        }
+    }, [error]);
+
     function containsObject(obj, list) {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].id === obj.id) {
+            if (list[i].betId === obj.betId) {
                 return true;
             }
         }
@@ -59,25 +80,25 @@ import BetSlip from './BetSlip';
         }
     }
 
-    function generateUniqueID(bet_id, market) {
-        return "" + bet_id + "_" + market;
+    function generateUniqueID(game_id, market) {
+        return "" + game_id + "_" + market;
     }
 
     return (
         <div className="bet-container">
-            {success !== "" && <Alert variant="success" className="success">{success}</Alert>}
-            {error !=="" && <Alert variant="danger" className="error">{error}</Alert>}
-            <div className="row title-container">
-                <div className="col col-container-teams">
+            <div variant="success" className = {`success ${transition ? 'show' : 'hide'}`}>{success}</div>
+            <div variant="danger" className = {`error ${transition ? 'show' : 'hide'}`}>{error}</div>
+            <div className="row row-container-titles">
+                <div className="col col-container teams">
                     <div className="">Game</div>
                 </div>
                 <div className="col col-container moneyline">
                     <div className="">Win</div>
                 </div>
-                <div className="col col-container">
+                <div className="col col-container spread">
                     <div className="">Spread</div>
                 </div>
-                <div className="col col-container">
+                <div className="col col-container total">
                     <div className="">Totals</div>
                 </div>
             </div>
@@ -106,30 +127,32 @@ import BetSlip from './BetSlip';
 
                 return(
                     <div key={game.id} className="row row-container">
-                        <div className="col col-container-teams">
-                            {moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>}
+                        <div className="col col-container teams teams-padding">
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[0].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[0].name}</div>)}
                             <hr/>
-                            {moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>}
+                            {(moneyline && <div className="box-teams">{moneyline.outcomes[1].name}</div>)
+                            || (spread && <div className="box-teams">{spread.outcomes[1].name}</div>)}
                         </div>
                         <div className="col col-container moneyline">
-                            {moneyline && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[0].price > 0 && <span>+</span>}{moneyline.outcomes[0].price}</button>}
+                            {moneyline ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[0].price > 0 && <span>+</span>}{moneyline.outcomes[0].price}</button>  : <div className="n-a">N/A</div>}
                             <hr/>
-                            {moneyline && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[1].price > 0 && <span>+</span>}{moneyline.outcomes[1].price}</button>}
+                            {moneyline ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, moneyline.key), "home_team": game.home_team, "away_team": game.away_team, "market":moneyline, "outcome":moneyline.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}>{moneyline.outcomes[1].price > 0 && <span>+</span>}{moneyline.outcomes[1].price}</button>  : <div className="n-a">N/A</div>} 
                         </div>
                         <div className="col col-container spread">
-                            {spread && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[0].point > 0 && <span>+</span>}{spread.outcomes[0].point}</span> ({spread.outcomes[0].price})</button>}
+                            {spread ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[0].point > 0 && <span>+</span>}{spread.outcomes[0].point}</span> ({spread.outcomes[0].price})</button>  : <div className="n-a">N/A</div>}
                             <hr/>
-                            {spread && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[1].point > 0 && <span>+</span>}{spread.outcomes[1].point}</span> ({spread.outcomes[1].price})</button>}
+                            {spread ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, spread.key), "home_team": game.home_team, "away_team": game.away_team, "market":spread, "outcome":spread.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">{spread.outcomes[1].point > 0 && <span>+</span>}{spread.outcomes[1].point}</span> ({spread.outcomes[1].price})</button>  : <div className="n-a">N/A</div>}
                         </div>
-                        <div className="col col-container">
-                            {total && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">O{total.outcomes[0].point}</span> ({total.outcomes[0].price})</button>}
+                        <div className="col col-container total">
+                            {total ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[0], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">O{total.outcomes[0].point}</span> ({total.outcomes[0].price})</button>  : <div className="n-a">N/A</div>}
                             <hr/>
-                            {total && <button className="box" onClick={() => addBet({"id": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">U{total.outcomes[1].point}</span> ({total.outcomes[1].price})</button>}
+                            {total ? <button className="box" onClick={() => addBet({"betId": generateUniqueID(game.id, total.key), "home_team": game.home_team, "away_team": game.away_team, "market":total, "outcome":total.outcomes[1], "commence_time": game.commence_time, "sport": game.sport_title})}><span className="gray">U{total.outcomes[1].point}</span> ({total.outcomes[1].price})</button>  : <div className="n-a">N/A</div>}
                         </div>
                     </div>
                 )
             })}
-             <BetSlip deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
+             <ActiveBets deleteBet={deleteBet} setActiveBets={setActiveBets} activeBets={activeBets} setSuccess={setSuccess} setError={setError}/>
             </div>
     )
 }
