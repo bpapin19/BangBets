@@ -125,8 +125,8 @@ deleteBet = (req, res) => {
         }
 
         return res.status(200).json({ success: true, data: bet })
-    }).catch(err => console.log(err))
-}
+    }).catch(err => console.log(err));
+};
 
 getBetById = async (req, res) => {
     await Bet.findOne({ _id: req.params.id }, (err, bet) => {
@@ -140,8 +140,8 @@ getBetById = async (req, res) => {
                 .json({ success: false, error: `Bet not found` });
         }
         return res.status(200).json({ success: true, data: bet });
-    }).catch(err => console.log(err))
-}
+    }).catch(err => console.log(err));
+};
 
 getBets = async (req, res) => {
     await Bet.find({}, (err, bets) => {
@@ -201,16 +201,6 @@ getBetResults = async (req, res) => {
         if (data.sports_results.game_spotlight && data.sports_results.game_spotlight.stage.includes("Final")) {
             return res.status(200).json({ success: true, results: data.sports_results.game_spotlight});
         }
-        // data.sports_results.games.map(game => {
-        //     var formattedDate = (game.date.replace(/\./g, ''));
-        //     console.log(game);
-        //     // console.log(req.params.start_time);
-        //     if (game.hasOwnProperty("status") && game.date === req.params.start_time) {
-        //         console.log(game)
-        //         return res.status(200).json({ success: true, data: game });
-        //     };
-        //     // console.log(game);
-        // });
         return res.status(400)
     });
 }
